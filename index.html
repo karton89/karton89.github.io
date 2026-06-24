@@ -575,6 +575,32 @@ footer::before {
   background: var(--paper-mid);
   padding: 1px 0;
 }
+.pptx-fab {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 120;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--rust);
+  color: var(--white);
+  font-family: var(--ff-mono);
+  font-size: 0.68rem;
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(30,20,14,0.22);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.pptx-fab:hover {
+  transform: translateY(-2px);
+  background: var(--ink);
+}
 
 /* ── Responsive ─────────────────────────────────── */
 @media (max-width: 768px) {
@@ -595,6 +621,13 @@ footer::before {
   .series-header { padding: 3rem 1.5rem; gap: 1.5rem; }
   .cv-section { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
   footer { padding: 4rem 1.5rem; }
+  .pptx-fab {
+    right: 1rem;
+    bottom: 1rem;
+    width: 68px;
+    height: 68px;
+    font-size: 0.62rem;
+  }
 }
 </style>
 </head>
@@ -609,6 +642,7 @@ footer::before {
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
+<a class="pptx-fab" href="portfolio_printmaking_with_images.pdf" title="PDF 보기">PDF<br>보기</a>
 
 <!-- ═══ HERO ═══ -->
 <section class="hero">
@@ -693,6 +727,16 @@ footer::before {
       <div class="work-caption">
         <p class="work-title">Iteration</p>
         <p class="work-meta">에칭 + 콜라그래프 · 2023 · Edition 1/10 · 50×60cm</p>
+      </div>
+    </div>
+    <div class="work-card reveal reveal-delay-3">
+      <div class="work-img">
+        <img class="work-image" src="img/2. 석판화 마음속의 정글, 2004.jpg" alt="석판화 마음속의 정글, 2004">
+        <div class="work-overlay"><p class="work-overlay-text">Mind Jungle, 2004</p></div>
+      </div>
+      <div class="work-caption">
+        <p class="work-title">Mind Jungle</p>
+        <p class="work-meta">석판화 · 2004 · 마음속의 정글 연작</p>
       </div>
     </div>
   </div>
