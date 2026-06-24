@@ -240,6 +240,25 @@ nav {
   opacity: 0.3;
   width: 40px; height: 40px;
 }
+.hero-img,
+.work-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-img {
+  object-position: center;
+}
+.work-image {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.45s ease, filter 0.45s ease;
+}
+.work-card:hover .work-image {
+  transform: scale(1.035);
+  filter: saturate(0.95) contrast(1.04);
+}
 .hero-caption {
   margin-top: 1.25rem;
   text-align: center;
@@ -385,6 +404,7 @@ nav {
 .work-overlay {
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: rgba(30,20,14,0.75);
   display: flex;
   align-items: flex-end;
@@ -607,13 +627,7 @@ footer::before {
     <span class="reg-mark bl"></span>
     <span class="reg-mark br"></span>
     <div class="hero-img-frame reveal">
-      <div class="hero-img-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-          <rect x="3" y="3" width="18" height="18" rx="1"/>
-          <path d="M3 9h18M9 3v18"/>
-        </svg>
-        <span>대표 작품 이미지</span>
-      </div>
+      <img class="hero-img" src="img/전시장에서 작가.JPG" alt="전시장에서 작가">
     </div>
     <p class="hero-caption reveal reveal-delay-1">대표작 제목 · 에칭 · 2024</p>
   </div>
@@ -653,7 +667,7 @@ footer::before {
   <div class="works-grid works-grid--2">
     <div class="work-card reveal">
       <div class="work-img">
-        <div class="work-placeholder">작품 이미지</div>
+        <img class="work-image" src="img/3. 석판화 마음속의 정글, 2024.jpg" alt="석판화 마음속의 정글, 2024">
         <div class="work-overlay"><p class="work-overlay-text">Trace #1, 2022</p></div>
       </div>
       <div class="work-caption">
@@ -663,7 +677,7 @@ footer::before {
     </div>
     <div class="work-card reveal reveal-delay-1">
       <div class="work-img">
-        <div class="work-placeholder">작품 이미지</div>
+        <img class="work-image" src="img/4. 석판화_마음속의 정글, 가시 면류관, 2004.jpg" alt="석판화 마음속의 정글, 가시 면류관, 2004">
         <div class="work-overlay"><p class="work-overlay-text">Trace #2, 2022</p></div>
       </div>
       <div class="work-caption">
@@ -673,7 +687,7 @@ footer::before {
     </div>
     <div class="work-card reveal reveal-delay-2">
       <div class="work-img">
-        <div class="work-placeholder">작품 이미지</div>
+        <img class="work-image" src="img/11. 석판화-마음속의 정글-추억속의 정글 30x40cm, 2025.jpg" alt="석판화 마음속의 정글 추억속의 정글, 2025">
         <div class="work-overlay"><p class="work-overlay-text">Iteration, 2023</p></div>
       </div>
       <div class="work-caption">
@@ -698,7 +712,7 @@ footer::before {
   <div class="works-grid works-grid--2">
     <div class="work-card reveal">
       <div class="work-img">
-        <div class="work-placeholder">작품 이미지</div>
+        <img class="work-image" src="img/5.아티스트 북 _나무의 서랍 ,2007.jpg" alt="아티스트 북 나무의 서랍, 2007">
         <div class="work-overlay"><p class="work-overlay-text">Memory Book I, 2023</p></div>
       </div>
       <div class="work-caption">
@@ -708,7 +722,7 @@ footer::before {
     </div>
     <div class="work-card reveal reveal-delay-1">
       <div class="work-img">
-        <div class="work-placeholder">작품 이미지</div>
+        <img class="work-image" src="img/11. 아티스트북 _별 북, 리놀륨 판화, 2024.jpg" alt="아티스트북 별 북, 리놀륨 판화, 2024">
         <div class="work-overlay"><p class="work-overlay-text">Memory Book II, 2024</p></div>
       </div>
       <div class="work-caption">
@@ -733,7 +747,7 @@ footer::before {
   <div class="works-grid works-grid--2">
     <div class="work-card reveal">
       <div class="work-img">
-        <div class="work-placeholder">작품 이미지</div>
+        <img class="work-image" src="img/7. 석판화 마음속의 정글 -피어나기 30x40cm.jpg" alt="석판화 마음속의 정글 피어나기">
         <div class="work-overlay"><p class="work-overlay-text">Landscape in 2 Colors, 2024</p></div>
       </div>
       <div class="work-caption">
@@ -743,7 +757,7 @@ footer::before {
     </div>
     <div class="work-card reveal reveal-delay-1">
       <div class="work-img">
-        <div class="work-placeholder">작품 이미지</div>
+        <img class="work-image" src="img/8. 석판화 마음속의 정글 - 고리 40x25cm, 2024.jpg" alt="석판화 마음속의 정글 고리, 2024">
         <div class="work-overlay"><p class="work-overlay-text">Field Study, 2025</p></div>
       </div>
       <div class="work-caption">
