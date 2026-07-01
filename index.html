@@ -1,0 +1,1346 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>종이, 숲 그리고 기억 — 강진숙</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
+<noscript><style>.page{ opacity:1 !important; transform:none !important; }</style></noscript>
+
+<!--
+  이미지를 넣는 방법
+  ------------------
+  각 작품 자리는 class="frame" 인 <div> 로 비워져 있습니다.
+  그 안에 아래처럼 이미지를 넣어 주세요.
+
+    <div class="frame">
+      <img src="작품파일명.jpg" alt="작품명">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+
+  이미지는 원래 비율과 자연 크기를 우선하며, 화면보다 클 때만 줄어듭니다.
+-->
+
+<style>
+  :root{
+    --ink: 33,31,28;
+    --ink-soft: 111,103,90;
+    --paper: 250,246,238;
+    --paper-deep: 240,233,217;
+    --line: rgba(var(--ink), .14);
+    --serif: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+    --sans: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+  }
+
+  body{
+    margin: 0;
+    background-color: rgb(var(--paper));
+    background-image:
+      linear-gradient(rgba(var(--paper),.86), rgba(var(--paper),.86)),
+      url('bg.png');
+    background-size: auto, 900px;
+    background-repeat: repeat, repeat;
+    background-attachment: fixed, fixed;
+    color: rgb(var(--ink));
+    font-family: var(--serif);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    counter-reset: pg;
+  }
+
+  ::selection{ background: rgba(var(--ink),.12); }
+
+  a{ color: inherit; }
+
+  h1,h2,h3,p{ margin: 0; }
+
+  /* ---------- page unit ---------- */
+  .page{
+    min-height: 100svh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 9vh 8vw;
+    scroll-snap-align: start;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .page.in{ opacity: 1; transform: translateY(0); }
+  .cover{ opacity: 1; transform: none; }
+
+  .page:not(.cover)::after{
+    counter-increment: pg;
+    content: counter(pg);
+    position: absolute;
+    bottom: 5.2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--sans);
+    font-size: .68rem;
+    letter-spacing: .18em;
+    color: rgba(var(--ink-soft),.8);
+  }
+
+  /* ---------- cover ---------- */
+  .cover{
+    text-align: center;
+    gap: 2.4rem;
+  }
+  .cover-title{
+    font-size: clamp(1.9rem, 4.6vw, 2.8rem);
+    font-weight: 500;
+    letter-spacing: .06em;
+    line-height: 1.5;
+  }
+  .cover-frame{
+    width: fit-content;
+    max-width: min(80vw, 900px);
+  }
+  .cover-frame .frame{ margin: 0 auto; }
+  .cover-name{
+    font-size: 1.05rem;
+    letter-spacing: .3em;
+    padding-left: .3em; /* optical centering with tracking */
+  }
+  .cover-sub{
+    font-family: var(--sans);
+    font-size: .68rem;
+    letter-spacing: .22em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+  }
+
+  /* ---------- spread (two-page layout) ---------- */
+  .spread{
+    width: 100%;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    align-items: center;
+    gap: 0 6vw;
+  }
+  .spread::before{
+    content: '';
+    position: absolute;
+    top: 6%; bottom: 6%; left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--line) 18%, var(--line) 82%, transparent);
+  }
+  .spread::after{
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: calc(50% - 34px);
+    width: 68px;
+    background: linear-gradient(to right, transparent, rgba(var(--ink),.035), transparent);
+    pointer-events: none;
+  }
+  .page-half{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.1rem;
+  }
+  .page-half.text-side{ padding-right: 2vw; }
+  .page-half.image-side{ padding-left: 2vw; }
+
+  @media (max-width: 860px){
+    .spread{ grid-template-columns: 1fr; gap: 4.5rem 0; max-width: 480px; }
+    .spread::before, .spread::after{ display: none; }
+    .page-half.text-side, .page-half.image-side{ padding: 0; }
+  }
+
+  /* ---------- plate / frame ---------- */
+  .plate{ display:flex; flex-direction:column; align-items:center; gap: 1.1rem; }
+  .plate.center{ align-items: center; text-align: center; }
+  .plate.center{ max-width: min(92vw, 960px) !important; }
+
+  .frame{
+    position: relative;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    border: 1px solid rgba(var(--ink),.16);
+    background: transparent;
+    overflow: visible;
+    line-height: 0;
+  }
+  .frame img{
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 72vh;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+  .frame .ph{
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans);
+    font-size: .64rem;
+    letter-spacing: .3em;
+    color: rgba(var(--ink-soft), .45);
+    text-transform: uppercase;
+  }
+
+  .reg{ position: absolute; width: 11px; height: 11px; pointer-events: none; }
+  .reg::before, .reg::after{ content:''; position:absolute; background: rgba(var(--ink),.38); }
+  .reg::before{ width: 11px; height: 1px; top: 5px; left: 0; }
+  .reg::after{ width: 1px; height: 11px; left: 5px; top: 0; }
+  .reg.tl{ top: -6px; left: -6px; }
+  .reg.tr{ top: -6px; right: -6px; }
+  .reg.bl{ bottom: -6px; left: -6px; }
+  .reg.br{ bottom: -6px; right: -6px; }
+
+  .cap-title{
+    font-style: italic;
+    font-size: .95rem;
+    line-height: 1.6;
+  }
+  .cap-meta{
+    font-family: var(--sans);
+    font-size: .74rem;
+    letter-spacing: .03em;
+    color: rgb(var(--ink-soft));
+  }
+
+  /* small multiples grid */
+  .grid-plates{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.6rem 1.4rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  .grid-plates.cols-3{ max-width: 100%; }
+  .grid-plates .mini{ display:flex; flex:0 1 auto; flex-direction:column; align-items:center; text-align:center; gap:.55rem; }
+  .grid-plates .frame{ max-width: 100%; }
+  .grid-plates img{ max-width: min(100%, 82vw); }
+  .grid-plates .cap-title{ font-size: .78rem; }
+  .grid-plates .cap-meta{ font-size: .66rem; }
+
+  .natural-group{
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+  .natural-group .frame{ flex: 0 1 auto; }
+  .natural-group img{ max-width: min(100%, 82vw); }
+  .box-series-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 680px));
+    gap: 1.4rem;
+    justify-content: center;
+    width: 100%;
+    max-width: min(100%, 1400px);
+  }
+  .box-series-grid .frame{
+    width: 100%;
+    aspect-ratio: 680 / 337;
+    background: rgba(var(--paper), .45);
+    overflow: hidden;
+  }
+  .box-series-grid img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .story-stack{
+    width: 100%;
+    max-width: 1024px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+  }
+  .story-item{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .7rem;
+  }
+  .story-item > .frame{
+    width: 100%;
+  }
+  .story-item > .frame img{
+    width: 100%;
+    max-width: none;
+    max-height: none;
+  }
+  .story-stack-bottom{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.4rem;
+  }
+  .story-stack-bottom .frame{
+    width: 100%;
+    height: clamp(180px, 33vw, 337px);
+    overflow: hidden;
+  }
+  .story-stack-bottom img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .small-tree-stack{
+    width: 100%;
+    max-width: 1180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8rem;
+  }
+  .small-tree-main{
+    width: min(100%, 1024px);
+  }
+  .small-tree-main .frame,
+  .small-tree-main img{
+    width: 100%;
+    max-width: none;
+    max-height: none;
+  }
+  .small-tree-row{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.4rem;
+    align-items: start;
+  }
+  .small-tree-row .frame,
+  .small-tree-row img{
+    width: 100%;
+    max-width: none;
+    max-height: none;
+  }
+  .small-tree-row .frame{
+    height: clamp(220px, 23vw, 360px);
+    overflow: hidden;
+  }
+  .small-tree-row img{
+    height: 100%;
+    object-fit: contain;
+  }
+  .chapter-betweens{
+    width: 100%;
+    max-width: 1240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+  }
+  .chapter-betweens-top{
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, .9fr);
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+  .chapter-betweens-top .frame,
+  .chapter-betweens-top img{
+    width: 100%;
+    max-width: none;
+    max-height: none;
+  }
+  .chapter-betweens-main .frame{
+    height: clamp(360px, 40vw, 640px);
+    overflow: hidden;
+  }
+  .chapter-betweens-main img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .chapter-betweens-side{
+    display: grid;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+    min-height: clamp(300px, 34vw, 520px);
+  }
+  .chapter-betweens-side .frame{
+    height: 100%;
+    overflow: hidden;
+  }
+  .chapter-betweens-side img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .chapter-betweens-title{
+    text-align: center;
+    margin-top: .2rem;
+  }
+  .chapter-betweens-gap{
+    height: clamp(1.5rem, 3vw, 3rem);
+  }
+  .chapter-betweens-bottom{
+    width: 100%;
+    max-width: 1180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .chapter-betweens-bottom .frame{
+    width: 100%;
+    overflow: hidden;
+  }
+  .chapter-betweens-bottom-main .frame{
+    height: clamp(420px, 48vw, 760px);
+  }
+  .chapter-betweens-bottom-row{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+  .chapter-betweens-bottom-row .frame{
+    height: clamp(220px, 24vw, 320px);
+  }
+  .chapter-betweens-bottom img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 980px){
+    .box-series-grid{
+      grid-template-columns: minmax(0, 680px);
+    }
+    .small-tree-row{
+      grid-template-columns: 1fr;
+      max-width: 540px;
+    }
+    .chapter-betweens-top{
+      grid-template-columns: 1fr;
+    }
+    .chapter-betweens-side{
+      min-height: 0;
+      grid-template-rows: repeat(2, minmax(220px, auto));
+    }
+    .chapter-betweens-bottom-row{
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- chapter divider ---------- */
+  .divider-page{ text-align: center; gap: 0; }
+  .motif{
+    width: 42px; height: 42px;
+    color: rgb(var(--ink));
+    opacity: .82;
+    margin-bottom: 1.6rem;
+  }
+  .motif path{ fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }
+  .chapter-num{
+    font-family: var(--sans);
+    font-size: .72rem;
+    letter-spacing: .4em;
+    color: rgb(var(--ink-soft));
+    margin-bottom: .9rem;
+  }
+  .chapter-title{
+    font-size: clamp(1.8rem, 4.4vw, 2.6rem);
+    font-weight: 500;
+    letter-spacing: .04em;
+    margin-bottom: .7rem;
+  }
+  .chapter-en{
+    font-family: var(--sans);
+    font-size: .7rem;
+    letter-spacing: .26em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+    margin-bottom: .3rem;
+  }
+  .chapter-year{
+    font-family: var(--sans);
+    font-size: .78rem;
+    color: rgb(var(--ink-soft));
+    margin-top: .9rem;
+    letter-spacing: .08em;
+  }
+
+  /* ---------- text pages ---------- */
+  .text-page{ width: 100%; max-width: 620px; text-align: left; }
+  .text-page.center{ text-align: center; }
+  .note-spread{
+    width: 100%;
+    max-width: 1280px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4vw;
+    align-items: start;
+  }
+  .note-spread .text-page{
+    max-width: none;
+  }
+  .eyebrow{
+    font-family: var(--sans);
+    font-size: .7rem;
+    letter-spacing: .32em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+    display: block;
+  }
+  .text-page h2{
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.8rem;
+    letter-spacing: .03em;
+  }
+  .lede p{
+    font-size: 1.02rem;
+    line-height: 2.05;
+    letter-spacing: .01em;
+    margin-bottom: 1.5rem;
+  }
+  .lede p:last-child{ margin-bottom: 0; }
+  .note-open p:first-of-type::first-letter{
+    font-size: 3rem;
+    line-height: .7;
+    font-weight: 500;
+    padding-right: .38rem;
+    padding-top: .5rem;
+    float: left;
+  }
+  .profile-lines p{ font-size: 1.05rem; line-height: 1.95; }
+  .profile-name{ font-size: 1.3rem; letter-spacing: .12em; margin-bottom: 1.3rem; }
+
+  /* ---------- CV ---------- */
+  .cv-page{ width: 100%; max-width: 700px; }
+  .cv-heading{
+    font-size: 1.05rem;
+    letter-spacing: .1em;
+    padding-bottom: .6rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .cv-heading .en{
+    font-family: var(--sans);
+    font-size: .64rem;
+    letter-spacing: .2em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+    margin-left: .7rem;
+  }
+  .cv-block + .cv-block{ margin-top: 2.6rem; }
+  .cv-row{
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 1.2rem;
+    padding: .55rem 0;
+    border-bottom: 1px dotted rgba(var(--ink),.12);
+    font-size: .86rem;
+    line-height: 1.65;
+  }
+  .cv-row:last-child{ border-bottom: none; }
+  .cv-year{
+    font-family: var(--sans);
+    color: rgb(var(--ink-soft));
+    font-size: .78rem;
+    letter-spacing: .02em;
+  }
+
+  /* ---------- toc (fore-edge tabs) ---------- */
+  .toc{
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    z-index: 60;
+  }
+  .toc a{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: .85rem .55rem;
+    font-family: var(--serif);
+    font-size: .74rem;
+    letter-spacing: .2em;
+    color: rgba(var(--ink-soft), .75);
+    text-decoration: none;
+    border-left: 1px solid var(--line);
+    background: rgba(var(--paper), .55);
+    transition: color .35s ease, background .35s ease;
+  }
+  .toc a.active{
+    color: rgb(var(--ink));
+    background: rgba(var(--paper), .92);
+  }
+  @media (max-width: 900px){ .toc{ display:none; } }
+
+  @media (prefers-reduced-motion: reduce){
+    .page{ transition:none; opacity:1; transform:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  @media (max-width: 640px){
+    .page{ padding: 5.5vh 4.5vw; }
+    .cover-frame{ max-width: 86vw; }
+    .lede p{
+      font-size: .96rem;
+      line-height: 1.9;
+      margin-bottom: 1.1rem;
+    }
+  }
+
+  @media (max-width: 860px){
+    .note-spread{
+      grid-template-columns: 1fr;
+      gap: 2.6rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav class="toc" aria-label="목차">
+  <a href="#profile" data-target="profile">소개</a>
+  <a href="#note" data-target="note">작가노트</a>
+  <a href="#ch-box" data-target="ch-box">상자 이야기</a>
+  <a href="#ch-sprout" data-target="ch-sprout">작은 나무 이야기</a>
+  <a href="#ch-tree" data-target="ch-tree">나무가 된 책들</a>
+  <a href="#ch-jungle" data-target="ch-jungle">마음속의 정글</a>
+  <a href="#cv" data-target="cv">이력</a>
+</nav>
+
+<!-- ============ 표지 ============ -->
+<section class="page cover" id="top">
+  <p class="cover-title">종이, 숲 그리고 기억</p>
+  <div class="cover-frame">
+    <div class="frame" style="--ar:4/5">
+      <img src="img/pptx/image1.png" alt="강진숙 작품 이미지">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+  </div>
+  <p class="cover-name">강진숙</p>
+  <p class="cover-sub">Lithography · Artist&rsquo;s Books · Paper Works</p>
+</section>
+
+<!-- ============ 소개 ============ -->
+<section class="page" id="profile">
+  <div class="text-page center">
+    <span class="eyebrow">Profile</span>
+    <p class="profile-name">강진숙</p>
+    <div class="profile-lines">
+      <p>판화가 · 북 아티스트</p>
+      <p>독일 유학 시절부터 현재까지</p>
+      <p>판화, 아티스트 북, 종이 작업을 통해</p>
+      <p>이야기와 기억의 풍경을 탐구해온 작가</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 작가노트 ============ -->
+<section class="page" id="note">
+  <div class="note-spread">
+    <div class="text-page">
+      <span class="eyebrow">Artist&rsquo;s Note</span>
+      <div class="lede note-open">
+        <p>나의 작업은 어린 시절부터 막연히 좋아했던 나무와 숲의 이미지에서 출발하여, 1996년 「상자 이야기」 석판화 연작으로 본격화되었다.</p>
+        <p>독일 유학 시절, 임신과 출산, 육아로 인해 집 안에 머무는 시간이 길어지면서 나는 스스로를 상자 속에 갇힌 존재처럼 느꼈다. 동시에 아르바이트를 하던 중 접혀 있던 종이 상자가 펼쳐지고 다시 공간이 되는 과정을 반복적으로 접하게 되었다. 이 경험은 상자를 단순한 물건이 아닌 보호와 억압, 생성과 가능성이 공존하는 공간으로 인식하게 만들었다.</p>
+        <p>상자에 대한 탐구는 석판화 작업으로 이어졌고, 이후 직접 글을 쓰고 석판화로 제작한 아티스트 북 『어느 상자 이야기』로 확장되었다. 비어 있다고 여겨졌던 상자 안에서 작은 나무가 자라나는 이야기는 다시 『작은 나무 이야기』로 이어졌으며, 상자를 넘어 성장한 나무는 더 넓은 세계로 나아가 숲을 이루고 새로운 관계와 기억을 만들어 간다.</p>
+      </div>
+    </div>
+    <div class="text-page">
+      <span class="eyebrow">Artist&rsquo;s Note</span>
+      <div class="lede">
+        <p>나무와 숲은 오랫동안 나의 작업을 관통하는 핵심 모티프가 되었다. 2001년부터 시작한 석판화 연작 「마음속의 정글」은 기억과 경험, 감정이 서로 얽혀 형성되는 내면의 풍경에 대한 탐구이다. 화면 속 수많은 풀과 나무들이 뒤엉켜 공존하는 모습에는 서로 다른 존재들이 함께 살아가는 삶에 대한 바람이 담겨 있다.</p>
+        <p>2004년 초 뮌헨 석판화 공방 레지던시에서 이 주제를 더욱 심화시켰으며, 같은 해 한국으로 돌아온 이후에는 아티스트 북 작업과 교육 활동에 집중하며 종이와 책이라는 매체의 가능성을 탐구하였다. 정형화된 사각형의 틀을 벗어나 주제에 따라 형태가 변화하는 다양한 책 작업을 통해 이야기와 조형의 관계를 실험해 왔다.</p>
+        <p>2024년과 2025년에는 독일 뷔르츠부르크 판화공방에서 다시 석판화 작업을 진행하며 오랫동안 이어져 온 작업의 흐름을 새로운 방식으로 확장하고 있다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 프롤로그: 1991년 초기작 ============ -->
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:56/38">
+          <img src="img/pptx/image4.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">숲</p>
+          <p class="cap-meta">석판화 · 56 × 38 cm · 1991</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:64/45.4">
+          <img src="img/pptx/image3.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">Ohne Titel</p>
+          <p class="cap-meta">석판화 · 64 × 45.4 cm · 1991</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER I. 상자 이야기 ============ -->
+<section class="page divider-page" id="ch-box">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M10 16 L24 12 L38 16 L38 34 L24 38 L10 34 Z"/>
+    <path d="M10 16 L24 20 L38 16"/>
+    <path d="M24 20 L24 38"/>
+  </svg>
+  <p class="chapter-num">I</p>
+  <h2 class="chapter-title">상자 이야기</h2>
+  <p class="chapter-en">Box Story</p>
+  <p class="chapter-year">1994 &ndash; 1999</p>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image6.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">어느 상자 이야기 시리즈</p>
+          <p class="cap-meta">석판화 · 1994&ndash;1999</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image5.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">첫 번째 개인전 전시장 전경</p>
+          <p class="cap-meta">Installation view</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center">
+    <div class="box-series-grid">
+      <div class="frame">
+        <img src="img/pptx/image7.png" alt="상자 이야기 시리즈 I">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame">
+        <img src="img/pptx/image8.png" alt="상자 이야기 시리즈 II">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame">
+        <img src="img/pptx/image9.jpg" alt="상자 이야기 시리즈 III">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame">
+        <img src="img/pptx/image10.jpg" alt="상자 이야기 시리즈 IV">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+    </div>
+    <div>
+      <p class="cap-title">상자 이야기 시리즈 I · II · III · IV</p>
+      <p class="cap-meta">다색 석판화 · 꼴라주 · 29 × 59 cm · 1994</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center">
+    <div class="frame">
+      <img src="img/pptx/image11.jpg" alt="어느 상자 이야기">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">어느 상자 이야기</p>
+      <p class="cap-meta">석판화 · 각 10 × 10 cm · 1994</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center">
+    <div class="story-stack">
+      <div class="story-item">
+        <div class="frame">
+          <img src="img/pptx/image12.jpg" alt="아티스트 북 어느 상자 이야기 석판화">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <p class="cap-title">석판화</p>
+      </div>
+      <div class="story-item">
+        <div class="story-stack-bottom">
+          <div class="frame">
+            <img src="img/pptx/image13.jpg" alt="아티스트 북 어느 상자 이야기 나일론 프린트 왼쪽">
+            <span class="reg tl"></span><span class="reg tr"></span>
+            <span class="reg bl"></span><span class="reg br"></span>
+          </div>
+          <div class="frame">
+            <img src="img/pptx/image14.jpg" alt="아티스트 북 어느 상자 이야기 나일론 프린트 오른쪽">
+            <span class="reg tl"></span><span class="reg tr"></span>
+            <span class="reg bl"></span><span class="reg br"></span>
+          </div>
+        </div>
+        <p class="cap-title">나일론 프린트</p>
+      </div>
+    </div>
+    <div>
+      <p class="cap-title">아티스트 북 『어느 상자 이야기』</p>
+      <p class="cap-meta">석판화 · 나일론 프린트 · 1996&ndash;1997</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER II. 작은 나무 이야기 ============ -->
+<section class="page divider-page" id="ch-sprout">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M24 40 V22"/>
+    <path d="M24 26 C16 26 14 18 14 14 C20 14 24 18 24 26 Z"/>
+    <path d="M24 22 C32 22 34 15 34 11 C27 11 24 16 24 22 Z"/>
+  </svg>
+  <p class="chapter-num">II</p>
+  <h2 class="chapter-title">작은 나무 이야기</h2>
+  <p class="chapter-en">Small Tree Story</p>
+  <p class="chapter-year">1999 &ndash; 2000</p>
+</section>
+
+<!--
+<section class="page">
+  <div class="plate center" style="max-width:460px">
+    <div class="frame" style="--ar:3/2">
+      <img src="img/pptx/image14.jpg" alt="강진숙 작품 이미지">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">아티스트 북 『작은 나무 이야기』</p>
+      <p class="cap-meta">글 강진숙 · 세리그라피 · 1999&ndash;2000</p>
+    </div>
+  </div>
+</section>
+ -->
+<section class="page">
+  <div class="plate center">
+    <div class="small-tree-stack">
+      <div class="small-tree-main">
+        <div class="frame">
+          <img src="img/pptx/image15.jpg" alt="아티스트 북 작은 나무 이야기 대표 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+      <div class="small-tree-row">
+        <div class="frame">
+          <img src="img/pptx/image16.jpg" alt="아티스트 북 작은 나무 이야기 이미지 1">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image17.jpg" alt="아티스트 북 작은 나무 이야기 이미지 2">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image18.jpg" alt="아티스트 북 작은 나무 이야기 이미지 3">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <p class="cap-title">아티스트 북 『작은 나무 이야기』</p>
+      <p class="cap-meta">글 강진숙 세리그라피 1999 2000</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 간주 (원본에 이미지만 있던 페이지들) ============ -->
+<section class="page">
+  <div class="chapter-betweens">
+    <div class="chapter-betweens-top">
+      <div class="chapter-betweens-main">
+        <div class="frame">
+          <img src="img/pptx/image19.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <p class="cap-title chapter-betweens-title">아티스트 북 나의 숲 나의 풍경, 1998</p>
+      </div>
+      <div class="chapter-betweens-side">
+        <div class="frame">
+          <img src="img/pptx/image20.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image21.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+    </div>
+    <div class="chapter-betweens-gap"></div>
+    <div class="chapter-betweens-bottom">
+      <div class="chapter-betweens-bottom-main">
+        <div class="frame">
+          <img src="img/pptx/image22.jpg" alt="이야기들의 이야기 2000년">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <p class="cap-title chapter-betweens-title">아티스트 북 이야기들의 이야기 2000년</p>
+      </div>
+      <div class="chapter-betweens-bottom-row">
+        <div class="frame">
+          <img src="img/pptx/image23.png" alt="이야기들의 이야기 하단 왼쪽">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image24.jpg" alt="이야기들의 이야기 하단 오른쪽">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER III. 나무가 된 책들 ============ -->
+<section class="page divider-page" id="ch-tree">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M24 40 V24"/>
+    <path d="M24 30 L14 20"/>
+    <path d="M24 26 L34 17"/>
+    <path d="M24 22 L18 14"/>
+    <path d="M24 20 L30 12"/>
+  </svg>
+  <p class="chapter-num">III</p>
+  <h2 class="chapter-title">나무가 된 책들</h2>
+  <p class="chapter-en">Books Turned into Trees</p>
+  <p class="chapter-year">2007 &ndash; 2016</p>
+</section>
+
+<section class="page">
+  <div style="width:100%; max-width:640px; display:flex; flex-direction:column; align-items:center; gap:1.8rem;">
+    <div class="grid-plates cols-3">
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image32.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" style="font-size:.78rem">나무의 서랍</p></div>
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image34.jpeg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" style="font-size:.78rem">가슴을 열어 보이는 남자</p></div>
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image33.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" style="font-size:.78rem">가슴을 열어 보이는 여자</p></div>
+    </div>
+    <p class="cap-meta">종이 · 2007</p>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:520px">
+    <div class="frame" style="--ar:3/2">
+      <img src="img/pptx/image36.jpg" alt="강진숙 작품 이미지">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">2007년 &laquo;좋다 갤러리&raquo; 전시장 전경</p>
+      <p class="cap-meta">Installation view</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div style="width:100%; max-width:520px; display:flex; flex-direction:column; align-items:center; gap:1.6rem;">
+    <div class="grid-plates">
+      <div class="mini">
+        <div class="frame" style="--ar:4/5"><img src="img/pptx/image35.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div>
+        <p class="cap-title">나무가 되고 싶은 책 책이 되고 싶은 나무</p>
+        <p class="cap-meta">2011</p>
+      </div>
+      <div class="mini">
+        <div class="frame" style="--ar:4/5"><img src="img/pptx/image38.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div>
+        <p class="cap-title">아기 칡과 오리나무 할머니</p>
+        <p class="cap-meta">2009</p>
+      </div>
+      <div class="mini">
+        <div class="frame" style="--ar:4/5"><img src="img/pptx/image37.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div>
+        <p class="cap-title">가로수 그늘 아래 서면</p>
+        <p class="cap-meta">2010</p>
+      </div>
+      <div class="mini">
+        <div class="frame" style="--ar:4/5"><img src="img/pptx/image39.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div>
+        <p class="cap-title">Imagine</p>
+        <p class="cap-meta">2013</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:400px">
+    <div class="frame" style="--ar:4/5">
+      <img src="img/pptx/image41.png" alt="강진숙 작품 이미지">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">아티스트 북 『누워서 사는 나무』</p>
+      <p class="cap-meta">2016</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image40.jpeg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">아티스트 북 『무제』</p>
+          <p class="cap-meta">2013</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image43.png" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">『What a wonderful world』</p>
+          <p class="cap-meta">2015</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER IV. 마음속의 정글 ============ -->
+<section class="page divider-page" id="ch-jungle">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M20 40 C18 28 22 18 19 8"/>
+    <path d="M24 40 C25 26 23 14 27 6"/>
+    <path d="M28 40 C31 30 28 20 32 10"/>
+  </svg>
+  <p class="chapter-num">IV</p>
+  <h2 class="chapter-title">마음속의 정글</h2>
+  <p class="chapter-en">Jungle in the Heart</p>
+  <p class="chapter-year">2001 &ndash; 2014</p>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:520px">
+    <div class="frame" style="--ar:3/2">
+      <img src="img/pptx/image42.jpg" alt="강진숙 작품 이미지">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">『마음속의 정글』</p>
+      <p class="cap-meta">리놀륨 판화 · 페이퍼 컷팅 · 2013&ndash;2014</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image45.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">마음속의 정글 &ndash; 피어나다</p>
+          <p class="cap-meta">석판화 · 2004</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image44.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">고리</p>
+          <p class="cap-meta">석판화 · 2004</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image47.jpg" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">마음속의 정글 &ndash; 원</p>
+          <p class="cap-meta">석판화 · 2005</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image46.png" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">추억 속의 정글</p>
+          <p class="cap-meta">석판화 · 2005</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:520px">
+    <div class="frame" style="--ar:3/2">
+      <img src="img/pptx/image48.jpg" alt="강진숙 작품 이미지">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">『마음속의 정글』</p>
+      <p class="cap-meta">석판화 · 리놀륨 판화 · 페이퍼 컷팅 · 2006</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER V. 이력 ============ -->
+<section class="page divider-page" id="cv">
+  <p class="chapter-num">V</p>
+  <h2 class="chapter-title">이력</h2>
+  <p class="chapter-en">Curriculum Vitae</p>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">학력<span class="en">Education</span></p>
+      <div class="cv-row"><span class="cv-year">1999</span><span>독일 브라운슈바익 조형예술대학 마이스터슐러 학위 취득</span></div>
+      <div class="cv-row"><span class="cv-year">1995</span><span>독일 브라운슈바익 조형예술대학 석사학위 취득</span></div>
+      <div class="cv-row"><span class="cv-year">1991</span><span>유럽공동연합회 교환학생 장학 제도 Erasmus 프로그램에 선발되어 독일 브라운슈바익으로 이주, 브라운슈바익 조형예술대학에서 칼 크리스토프 슐츠 교수와 석판화 연구</span></div>
+      <div class="cv-row"><span class="cv-year">1992</span><span>국립 바르셀로나 미술대학에서 판화&middot;석판화 전공</span></div>
+      <div class="cv-row"><span class="cv-year">1988</span><span>시립 인천대학교 서양화 전공 학사학위 취득</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">개인전<span class="en">Solo Exhibitions</span></p>
+      <div class="cv-row"><span class="cv-year">2023</span><span>종이생각 &ndash; 생각하는 종이 展, 갤러리 플라워스, 파주</span></div>
+      <div class="cv-row"><span class="cv-year">2012</span><span>나무에서 종이 종이에서 나무 展, 강진숙 판화&middot;아티스트 북 개인전, 천안 법원 갤러리, 천안</span></div>
+      <div class="cv-row"><span class="cv-year">2010</span><span>강진숙 아티스트 북 展, 소노 팩토리, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2010</span><span>북 아티스트 강진숙의 책 만드는 책 출판 기념전 &ndash; 책 속의 책을 만나다, 대안공간 눈, 수원</span></div>
+      <div class="cv-row"><span class="cv-year">2009</span><span>마음속의 정글 &ndash; 책으로의 정글 展, 강진숙 개인전, 좋다 갤러리, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2007</span><span>서울 국제 북 아트전, 코엑스, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2005</span><span>강진숙 아티스트북 전, 대안공간 눈, 수원</span></div>
+      <div class="cv-row"><span class="cv-year">2005</span><span>아티스트북전, 강진숙 = 독일상자, 삼원 페이퍼갤러리, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>석판화 전, Steindruck M&uuml;nchen, 뮌헨(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>상자 이야기, 갤러리 우덕, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>Geschichte aus dem Karton, 알펠드 시립미술관, 알펠드(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2000</span><span>Geschichte von der Geschichten, 바트 간데스하임(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">1997</span><span>Geschichte aus dem Karton, 기독회관 전시실, 브라운슈바익(독일)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">그룹전<span class="en">Group Exhibitions</span></p>
+      <div class="cv-row"><span class="cv-year">2011</span><span>Between you &amp; me, 삼원 페이퍼 갤러리, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2009</span><span>청주 국제 북 아트 展, 청주시 한국공예관 1전시실, 청주</span></div>
+      <div class="cv-row"><span class="cv-year">2008</span><span>나혜석의 후예 &ndash; 수원의 여성작가 30인 展, 수원시가족여성회관 해피갤러리 개관기념전, 수원</span></div>
+      <div class="cv-row"><span class="cv-year">2008</span><span>청주 국제 북 아트 展, 청주시 한국공예관 1전시실, 청주</span></div>
+      <div class="cv-row"><span class="cv-year">2006</span><span>판화가들의 북 아트전, 진선 갤러리, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2005</span><span>Going out 전, 독일 구텐베르크 박물관 &middot; 청주 고인쇄박물관, 마인츠(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>아티스트 북 HBK Braunschweig 전, 빌리우스 미술대학 전시실, 리타운(폴란드)</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>&ldquo;따로 또 같이&rdquo; 전, 오폴레 시립미술관, 오폴레(폴란드)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">그룹전 (계속)<span class="en">Group Exhibitions</span></p>
+      <div class="cv-row"><span class="cv-year">2000&ndash;2004</span><span>라이프치히 도서전, 프랑크푸르트 도서전, 북 아트 페어 참가</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>제3회 북부 독일 Hand pressen masse, 함부르크</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>청년작가 환경청 소장전, 환경청 전시장, 베를린(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>제106회 · 107회 forumbookart 전, 시카고 · 앤아버(미국)</span></div>
+      <div class="cv-row"><span class="cv-year">2001, 2002</span><span>Druckgrafik Printmaking, 하노버 · 뉘른베르크(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2002, 2003</span><span>Art Frankfurt, 글로부스 갤러리, 프랑크푸르트 &middot; Kunst Markt, 드레스덴(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2001, 2002</span><span>제10회 · 11회 아티스트북 국제전, 라이프치히 &middot; 쾰른 &middot; 프랑크푸르트 &middot; 드레스덴(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2001</span><span>독일 국립도서관 소장전 1997&ndash;1999, 독일 책&middot;인쇄박물관, 라이프치히(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2000</span><span>니더작센주 문화부 초대전, 문화부 전시장, 하노버(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">1999</span><span>K&uuml;nstlerbuch &ndash; Buch als Kunstwerk, Objekt, Kassette, 브라운슈바익 조형예술대학 마이스터슐러 전시, 브라운슈바익(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">1996</span><span>6 x Grafik 젊은 판화작가 전, 국립 테아터미술관, 브라운슈바익(독일)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">단체전<span class="en">Joint Exhibitions</span></p>
+      <div class="cv-row"><span class="cv-year">2022</span><span>클링스포어 박물관의 보물, 한국에 경의를 &ndash; 활자, 책 그리고 인쇄, 청주 문화제조창 본관 3층 갤러리, 청주</span></div>
+      <div class="cv-row"><span class="cv-year">2022</span><span>행궁유람 행행행 展, 수원시립미술관, 수원</span></div>
+      <div class="cv-row"><span class="cv-year">2016</span><span>책은 왜 사각형이어야 하는가?, 한국 북 아트 협회 정기회원전, 갤러리 사각형, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2015</span><span>예술로서의 책, 10년의 날개를 달다, 한국 북 아트 협회전 10주년 전시, 최정아 갤러리, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>忘年友&hellip; 박수근 미술관에 들다, 현대 판화가 협회 기증작품전, 박수근 미술관, 양구</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>멋진 판화 &ndash; 현대 판화가 협회 전, 서울시립미술관 경희궁 분관, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>Real Round Story, 세종문화회관 세종이야기, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>서울 국제 도서전 북 아트 공방 꿈지락 부스 展, 코엑스, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>또 다른 정원을 만나다, 2013 순천만 국제정원박람회 개최기념 특별전 &ndash; 북 아트로 보는 가든 展, 국립순천대학교 기획전시실, 순천</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>The Garden, 한국 북 아트 협회 전, 필라델피아 예술대학교 전시장</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>서울 국제 소형 북 아트전, 한국 북 아트 협회 전, 코엑스, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>Book Art 2013&ndash;14 Japan &ndash; Korea, 갤러리 진선, 서울 &middot; 오사카</span></div>
+      <div class="cv-row"><span class="cv-year">2012</span><span>낯설음과 익숙함에 대하여 &ndash; 복수 예술을 통한 소통의 확인, 한국공예&middot;디자인문화진흥원 2층 2전시실, 서울</span></div>
+      <div class="cv-row"><span class="cv-year">2012</span><span>북 아트 공방 꿈지락 展, 대안공간 눈, 수원</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">수상경력<span class="en">Awards</span></p>
+      <div class="cv-row"><span class="cv-year">2005</span><span>제1회 서울 세계 북 아트 공모전 동상 수상</span></div>
+    </div>
+    <div class="cv-block">
+      <p class="cv-heading">소장경력<span class="en">Collections</span></p>
+      <div class="cv-row"><span class="cv-year">2006</span><span>클링스포어 박물관, 마인츠(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>뮌헨 바이에른 국립도서관(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2003</span><span>독일 환경부, 베를린(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>앤아버 시립 뮤지엄(미국)</span></div>
+      <div class="cv-row"><span class="cv-year">2003</span><span>라이프치히 독일 책&middot;인쇄박물관, 라이프치히(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>라이프치히 국립도서관, 프랑크푸르트 국립도서관(독일)</span></div>
+      <div class="cv-row"><span class="cv-year">1997&ndash;1999</span><span>헤어초크 아우구스트 도서관, 볼펜뷰텔(독일)</span></div>
+    </div>
+    <div class="cv-block">
+      <p class="cv-heading">저서<span class="en">Publications</span></p>
+      <div class="cv-row"><span class="cv-year">2010.3</span><span>&lt;북 아티스트 강진숙의 책 만드는 책&gt;, 도서출판 글을읽다</span></div>
+      <div class="cv-row"><span class="cv-year">2010.10</span><span>&lt;나무가 되고 싶은 책 책이 되고 싶은 나무&gt;, 도서출판 글을읽다</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 맺음말 ============ -->
+<section class="page" id="closing">
+  <div class="text-page center">
+    <svg class="motif" viewBox="0 0 48 48" style="width:26px;height:26px;opacity:.55">
+      <path d="M24 40 V22"/>
+      <path d="M24 26 C16 26 14 18 14 14 C20 14 24 18 24 26 Z"/>
+      <path d="M24 22 C32 22 34 15 34 11 C27 11 24 16 24 22 Z"/>
+    </svg>
+    <div class="lede" style="margin-top:2rem">
+      <p>나의 작업은 하나의 결론을 향해 나아가기보다 상자에서 시작된 이야기가 나무가 되고 숲이 되어 계속 자라나는 과정을 기록하는 일에 가깝다. 하나의 나무가 모여 숲이 되고 산이 되듯, 작은 존재 하나하나의 소중함을 기억하며 작업을 이어가고 있다.</p>
+    </div>
+    <p class="cover-name" style="margin-top:2.4rem; font-size:1rem;">강진숙</p>
+  </div>
+</section>
+
+<script>
+  // 스크롤에 따라 페이지가 조용히 드러나는 효과
+  const pages = document.querySelectorAll('.page');
+
+  if (!('IntersectionObserver' in window)) {
+    // 구형 브라우저: 애니메이션 없이 바로 전체 표시
+    pages.forEach(p => p.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('in');
+      });
+    }, { threshold: 0.18 });
+    pages.forEach(p => io.observe(p));
+
+    // 목차(오른쪽 탭)에서 현재 장 표시
+    const tocLinks = document.querySelectorAll('.toc a');
+    const chapterIds = Array.from(tocLinks).map(a => a.dataset.target);
+    const chapterEls = chapterIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    const setActive = (id) => {
+      tocLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+    };
+
+    const chapterIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { threshold: 0.5 });
+    chapterEls.forEach(el => chapterIO.observe(el));
+  }
+
+  // 안전장치: 혹시 관찰이 누락된 페이지가 있어도 3초 후 모두 표시
+  setTimeout(() => pages.forEach(p => p.classList.add('in')), 3000);
+</script>
+
+</body>
+</html>
+
