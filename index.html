@@ -648,7 +648,7 @@
     top: 50%;
     left: 50%;
     width: min(920px, 88vw);
-    aspect-ratio: 1448 / 1086;
+    aspect-ratio: 300 / 1086;
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 0;
@@ -659,9 +659,11 @@
     position: absolute;
     inset: 0;
     background: url('img/pptx/pimg.jpg') center / contain no-repeat;
+    /*
     filter:
       drop-shadow(0 10px 22px rgba(var(--ink), .1))
       drop-shadow(0 3px 8px rgba(var(--ink), .05));
+    */
     transform: rotateX(2deg) rotateY(-1deg);
     transform-origin: center center;
     transition: transform 1.3s cubic-bezier(.22, 1, .36, 1), filter 1.3s ease;
