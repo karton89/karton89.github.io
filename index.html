@@ -111,7 +111,7 @@
 
   /* ---------- cover ---------- */
   .cover{
-    text-align: center;
+    /* text-align: center; */
     gap: 2.4rem;
   }
   .cover-title{
@@ -251,10 +251,22 @@
   .page-half.text-side{ padding-right: 2vw; }
   .page-half.image-side{ padding-left: 2vw; }
 
+  /* same display height for side-by-side works with different aspect ratios */
+  .spread.match-height .frame img{
+    height: clamp(160px, 28vh, 280px);
+    width: auto;
+    max-width: 100%;
+    max-height: none;
+  }
+
   @media (max-width: 860px){
     .spread{ grid-template-columns: 1fr; gap: 4.5rem 0; max-width: 480px; }
     .spread::before, .spread::after{ display: none; }
     .page-half.text-side, .page-half.image-side{ padding: 0; }
+    .spread.match-height .frame img{
+      height: auto;
+      max-height: 72vh;
+    }
   }
 
   /* ---------- plate / frame ---------- */
@@ -267,7 +279,7 @@
     display: inline-block;
     width: auto;
     max-width: 100%;
-    border: 1px solid rgba(var(--ink),.16);
+    /* border: 1px solid rgba(var(--ink),.16); */
     background: transparent;
     overflow: visible;
     line-height: 0;
@@ -344,9 +356,42 @@
     gap: clamp(.7rem, 1.8vw, 1.2rem);
     width: 100%;
   }
+  .book-spread-row.match-h{
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(1.2rem, 3vw, 2rem);
+  }
+  .book-spread-row.match-h.tight{
+    gap: clamp(1rem, 2.4vw, 1.6rem);
+  }
+  .book-spread-item{
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .7rem;
+    text-align: center;
+  }
+  .book-spread-item .frame{
+    width: 100%;
+  }
   .book-spread-row .frame{
     flex: 1 1 0;
     min-width: 0;
+    width: 100%;
+  }
+  .book-spread-row.match-h > .frame{
+    flex: 0 1 auto;
+    width: auto;
+    max-width: min(420px, calc(50% - .8rem));
+    height: clamp(280px, 42vw, 460px);
+    overflow: hidden;
+  }
+  .book-spread-row.match-h .book-spread-item .frame{
+    height: clamp(280px, 42vw, 460px);
+    overflow: hidden;
+    flex: 0 0 auto;
     width: 100%;
   }
   .book-spread-row img{
@@ -356,6 +401,19 @@
     max-height: none;
     object-fit: contain;
   }
+  .book-spread-row.match-h > .frame img{
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+  .book-spread-row.match-h .book-spread-item img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
 
   @media (max-width: 720px){
     .book-spread-row{
@@ -363,9 +421,21 @@
       align-items: center;
       gap: 1.2rem;
     }
-    .book-spread-row .frame{
+    .book-spread-row .frame,
+    .book-spread-item{
       flex: 0 1 auto;
       max-width: min(300px, 78vw);
+    }
+    .book-spread-row.match-h > .frame,
+    .book-spread-row.match-h .book-spread-item .frame{
+      height: auto;
+      width: 100%;
+      max-width: min(300px, 78vw);
+    }
+    .book-spread-row.match-h > .frame img,
+    .book-spread-row.match-h .book-spread-item img{
+      width: 100%;
+      height: auto;
     }
   }
 
@@ -404,38 +474,45 @@
 
   .story-stack{
     width: 100%;
-    max-width: 1024px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.4rem;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    column-gap: 2.2rem;
   }
   .story-item{
     width: 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     gap: .7rem;
   }
-  .story-item > .frame{
+  /* left full artwork + right stack share the same box height */
+  .story-item:first-child > .frame,
+  .story-stack-bottom{
+    display: block;
     width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
   }
-  .story-item > .frame img{
+  .story-item:first-child > .frame img{
     width: 100%;
+    height: 100%;
     max-width: none;
     max-height: none;
+    object-fit: contain;
+    display: block;
   }
   .story-stack-bottom{
-    width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    justify-content: center;
-    align-items: flex-start;
-    gap: 1.4rem;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
   }
   .story-stack-bottom .frame{
     width: 100%;
-    height: clamp(180px, 33vw, 337px);
+    height: 100%;
+    min-height: 0;
     overflow: hidden;
   }
   .story-stack-bottom img{
@@ -443,46 +520,91 @@
     height: 100%;
     max-width: none;
     max-height: none;
-    object-fit: contain;
+    /* object-fit: cover; */
+    object-position: center;
+    display: block;
+  }
+  .story-cap{
+    text-align: center;
+  }
+  @media (max-width: 860px){
+    .story-stack{
+      grid-template-columns: 1fr;
+      gap: 2.4rem;
+      max-width: 520px;
+    }
+    .story-item:first-child > .frame,
+    .story-stack-bottom{
+      aspect-ratio: auto;
+      height: auto;
+    }
+    .story-item:first-child > .frame img,
+    .story-stack-bottom img{
+      height: auto;
+      object-fit: contain;
+    }
+    .story-stack-bottom{
+      display: flex;
+      flex-direction: column;
+    }
+    .story-stack-bottom .frame{
+      height: auto;
+    }
   }
 
-  .small-tree-stack{
+  .little-tree-stack{
     width: 100%;
     max-width: 1180px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.8rem;
-  }
-  .small-tree-main{
-    width: min(100%, 1024px);
-  }
-  .small-tree-main .frame,
-  .small-tree-main img{
-    width: 100%;
-    max-width: none;
-    max-height: none;
-  }
-  .small-tree-row{
-    width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.4rem;
-    align-items: start;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: .9rem 1.2rem;
   }
-  .small-tree-row .frame,
-  .small-tree-row img{
+  .little-tree-stack .small-tree-main{
     width: 100%;
+    min-width: 0;
+  }
+  .little-tree-stack .small-tree-main .frame{
+    display: block;
+    width: 100%;
+  }
+  .little-tree-stack .small-tree-main img{
+    width: 100%;
+    height: auto;
     max-width: none;
     max-height: none;
+    display: block;
   }
-  .small-tree-row .frame{
-    height: clamp(220px, 23vw, 360px);
+  .little-tree-row{
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+  }
+  .little-tree-row .frame{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
     overflow: hidden;
   }
-  .small-tree-row img{
+  .little-tree-row img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
     height: 100%;
-    object-fit: contain;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .little-tree-cap{
+    text-align: center;
+    margin-top: 1.1rem;
   }
   .chapter-betweens{
     width: 100%;
@@ -539,41 +661,82 @@
   .chapter-betweens-bottom{
     width: 100%;
     max-width: 1180px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 1rem 1.4rem;
   }
-  .chapter-betweens-bottom .frame{
+  .chapter-betweens-bottom-main{
     width: 100%;
-    overflow: hidden;
+    min-width: 0;
   }
   .chapter-betweens-bottom-main .frame{
-    height: clamp(420px, 48vw, 760px);
+    display: block;
+    width: 100%;
+  }
+  .chapter-betweens-bottom-main img{
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    display: block;
   }
   .chapter-betweens-bottom-row{
     width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.4rem;
-    align-items: stretch;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
   }
   .chapter-betweens-bottom-row .frame{
-    height: clamp(220px, 24vw, 320px);
-  }
-  .chapter-betweens-bottom img{
+    position: relative;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .chapter-betweens-bottom-row img{
+    position: absolute;
+    inset: 0;
+    /* width: 100%; */
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .chapter-betweens-bottom-cap{
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: .2rem;
   }
 
   @media (max-width: 980px){
     .box-series-grid{
       grid-template-columns: minmax(0, 680px);
     }
-    .little-tree-row{
+    .little-tree-stack{
       grid-template-columns: 1fr;
-      max-width: 540px;
+      gap: 1.4rem;
+      max-width: 640px;
+    }
+    .little-tree-row{
+      height: auto;
+      grid-template-rows: none;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    .little-tree-row .frame{
+      position: static;
+      height: auto;
+    }
+    .little-tree-row img{
+      position: static;
+      height: auto;
+      object-fit: contain;
     }
     .chapter-betweens-top{
       grid-template-columns: 1fr;
@@ -581,6 +744,26 @@
     .chapter-betweens-side{
       min-height: 0;
       grid-template-rows: repeat(2, minmax(220px, auto));
+    }
+    .chapter-betweens-bottom{
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+      max-width: 640px;
+    }
+    .chapter-betweens-bottom-row{
+      height: auto;
+      grid-template-rows: none;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    .chapter-betweens-bottom-row .frame{
+      position: static;
+      height: auto;
+    }
+    .chapter-betweens-bottom-row img{
+      position: static;
+      height: auto;
+      object-fit: contain;
     }
     .chapter-betweens-bottom-row{
       grid-template-columns: 1fr;
@@ -1137,7 +1320,7 @@
 
 <!-- ============ 프롤로그: 1991년 초기작 ============ -->
 <section class="page">
-  <div class="spread">
+  <div class="spread match-height">
     <div class="page-half image-side">
       <div class="plate">
         <div class="frame" style="--ar:64/45.4">
@@ -1146,21 +1329,21 @@
           <span class="reg bl"></span><span class="reg br"></span>
         </div>
         <div>
-          <p class="cap-title">Ohne Titel</p>
-          <p class="cap-meta">석판화 · 64 × 45.4 cm · 1991</p>
+          <p class="cap-title">무제</p>
+          <p class="cap-meta">석판화 · 65 × 45.4 cm<br>1991</p>
         </div>
       </div>
     </div>
     <div class="page-half image-side">
       <div class="plate">
         <div class="frame" style="--ar:56/38">
-          <img src="img/pptx/image4.jpg" alt="강진숙 작품 이미지" style="width:320px;height:189px">
+          <img src="img/pptx/image4.jpg" alt="강진숙 작품 이미지">
           <span class="reg tl"></span><span class="reg tr"></span>
           <span class="reg bl"></span><span class="reg br"></span>
         </div>
         <div>
           <p class="cap-title">숲</p>
-          <p class="cap-meta">석판화 · 56 × 38 cm · 1991</p>
+          <p class="cap-meta">석판화 · 56 × 38 cm<br>1991</p>
         </div>
       </div>
     </div>
@@ -1191,7 +1374,7 @@
         </div>
         <div>
           <p class="cap-title">첫 번째 개인전 전시장 전경</p>
-          <p class="cap-meta">Installation view</p>
+          <p class="cap-meta"></p>
         </div>
       </div>
     </div>
@@ -1204,7 +1387,7 @@
         </div>
         <div>
           <p class="cap-title">상자에서 나온 이야기 시리즈 중 </p>
-          <p class="cap-meta">석판화 · 33x33cm · 2004</p>
+          <p class="cap-meta">석판화 · 33x33cm <br>2004</p>
         </div>
       </div>
     </div>
@@ -1237,7 +1420,7 @@
     </div>
     <div>
       <p class="cap-title">상자 이야기 시리즈 I · II · III · IV</p>
-      <p class="cap-meta">다색 석판화 · 꼴라주 · 29 × 59 cm · 1994</p>
+      <p class="cap-meta">다색 석판화 · 꼴라주 · 29 × 59 cm <br> 1994</p>
     </div>
   </div>
 </section>
@@ -1251,7 +1434,7 @@
     </div>
     <div>
       <p class="cap-title">어느 상자 이야기</p>
-      <p class="cap-meta">석판화 · 각 10 × 10 cm · 1994</p>
+      <p class="cap-meta">석판화 · 각 10 × 10 cm <br> 1994</p>
     </div>
   </div>
 </section>
@@ -1265,7 +1448,11 @@
           <span class="reg tl"></span><span class="reg tr"></span>
           <span class="reg bl"></span><span class="reg br"></span>
         </div>
-       
+        <div class="story-cap">
+          <p class="cap-title">어느 상자 이야기</p>
+          <p class="cap-meta">아티스트 북 글 강진숙 석판화 영어 독어 버전</p>
+          <p class="cap-meta">1996 &ndash; 1997</p>
+        </div>
       </div>
       <div class="story-item">
         <div class="story-stack-bottom">
@@ -1280,12 +1467,12 @@
             <span class="reg bl"></span><span class="reg br"></span>
           </div>
         </div>
-        
+        <div class="story-cap">
+          <p class="cap-title">어느 상자 이야기</p>
+          <p class="cap-meta">아티스트 북 나일론 프린트 한국어 독어 버전</p>
+          <p class="cap-meta">1998</p>
+        </div>
       </div>
-    </div>
-    <div>
-      <p class="cap-title">아티스트 북 『어느 상자 이야기』글 강진숙</p>
-      <p class="cap-meta">석판화 · 나일론 프린트 · 1996&ndash;1997</p>
     </div>
   </div>
 </section>
@@ -1346,11 +1533,11 @@
         </div>
       </div>
     </div>
-    <div style="text-align:center">
-      <p class="cap-title">아티스트 북 『작은 나무 이야기』</p>
-      <p class="cap-meta"> 글 강진숙 · 세리그라피 1999&ndash;2000</p>
+    <div class="little-tree-cap">
+      <p class="cap-title">작은 나무 이야기</p>
+      <p class="cap-meta">아티스트 북 글 강진숙 세리그라피</p>
+      <p class="cap-meta">1999 &ndash; 2000</p>
     </div>
-   
   </div>
 </section>
 
@@ -1389,8 +1576,11 @@
         </div>
       </div>
     </div>
-    <p class="cap-title chapter-betweens-title">아티스트 북 · 나의 숲 나의 풍경</p>
-    <p class="cap-meta"> 석판화 · 1998</p>
+    <div class="chapter-betweens-bottom-cap">
+      <p class="cap-title">나의 숲 나의 풍경</p>
+      <p class="cap-meta">아티스트 북 석판화 with 크리스틴 휜스터부쉬</p>
+      <p class="cap-meta">1998</p>
+    </div>
 </section>
 
 <section class="page divider-page" id="ch-sprout">
@@ -1401,31 +1591,37 @@
   </svg>
   <p class="chapter-num">IV</p>
   <h2 class="chapter-title">이야기들의 이야기</h2>
-  <p class="chapter-en">Stories of Stories</p>
+  <p class="chapter-en">아티스트 북 엽서 실크스크린</p>
   <p class="chapter-year">2000</p>
 </section>
 
-<section class="page">  
+<section class="page">
   <div class="plate center">
     <div class="chapter-betweens-bottom">
       <div class="chapter-betweens-bottom-main">
         <div class="frame">
-          <img src="img/pptx/image22.jpg" alt="이야기들의 이야기 
-          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+          <img src="img/pptx/image24.jpg" alt="이야기들의 이야기 아티스트 북">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
         </div>
       </div>
       <div class="chapter-betweens-bottom-row">
         <div class="frame">
-          <img src="img/pptx/image23.png" alt="이야기들의 이야기 하단 왼쪽">
-          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+          <img src="img/pptx/image23.png" alt="이야기들의 이야기 상자">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
         </div>
         <div class="frame">
-          <img src="img/pptx/image24.jpg" alt="이야기들의 이야기 하단 오른쪽">
-          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+          <img src="img/pptx/image22.jpg" alt="이야기들의 이야기 전개">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
         </div>
       </div>
-       <p class="cap-title chapter-betweens-title">이야기들의 이야기
-         <p class="cap-meta"> 엽서. 실크스크린 · 2000</p>  
+      <div class="chapter-betweens-bottom-cap">
+        <p class="cap-title">이야기들의 이야기</p>
+        <p class="cap-meta">아티스트 북 엽서 실크스크린</p>
+        <p class="cap-meta">2000</p>
+      </div>
     </div>
   </div>
 </section>
@@ -1453,7 +1649,7 @@
       <span class="reg bl"></span><span class="reg br"></span>
     </div>
     <div>
-      <p class="cap-title">나무의 서랍  <p class="cap-meta">종이 · 2007
+      <p class="cap-title">나무의 서랍  <p class="cap-meta">종이<br>2007
       </p>
     </div>
   </div>
@@ -1462,11 +1658,11 @@
 <section class="page">
   <div style="width:100%; max-width:640px; display:flex; flex-direction:column; align-items:center; gap:1.8rem;">
     <div class="grid-plates cols-3">
-      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image32.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >2007년 좋다 갤러리 전시장 전경
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image32.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >2007년 좋다 갤러리 전시 전경
       </p></div>
-      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image33.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >아기 칡과 오리나무 할머니 <p class="cap-meta">종이·엠보스 2009 
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image33.jpg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >아기 칡과 오리나무 할머니 <p class="cap-meta">종이·엠보스 나무<br>2009 
       </p></div>
-      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image34.jpeg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >나무가 되고 싶은 책 책이 되고 싶은 나무 <p class="cap-meta">종이·  2011
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image34.jpeg" alt="강진숙 작품 이미지"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >나무가 되고 싶은 책 책이 되고 싶은 나무 <p class="cap-meta">종이<br>2011
       </p></div>
     </div>
   </div>
@@ -1480,7 +1676,7 @@
       <span class="reg bl"></span><span class="reg br"></span>
     </div>
     <div>
-      <p class="cap-title">가로수 그늘 아래 서면 <p class="cap-meta">페이퍼 커팅 · 2010 
+      <p class="cap-title">가로수 그늘 아래 서면 <p class="cap-meta">페이퍼 커팅<br>2010 
       </p>
     </div>
   </div>
@@ -1494,7 +1690,36 @@
       <span class="reg bl"></span><span class="reg br"></span>
     </div>
     <div>
-      <p class="cap-title">Imagine  <p class="cap-meta">리놀륨 판화 · 페이퍼 커팅 · 엠보스 · 2013</p>
+      <p class="cap-title">Imagine  <p class="cap-meta">리놀륨 판화 · 페이퍼 커팅 · 엠보스 <br>2013</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image40.jpeg" alt="강진숙 작품 이미지" style="width:330px">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">『무제』 <p class="cap-meta">리놀륨 판화 · 페이퍼 커팅<br>2013</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image41.png" alt="강진숙 작품 이미지">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">『What a wonderful world』 <p class="cap-meta"> 페이퍼 커팅<br>2015</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1519,37 +1744,8 @@
       </div>
     </div>
     <div>
-      <p class="cap-title">아티스트 북 『누워서 사는 나무』
-       <p class="cap-meta"> 스텐실 · 글 강진숙 · 2016</p>
-    </div>
-  </div>
-</section>
-
-<section class="page">
-  <div class="spread">
-    <div class="page-half image-side">
-      <div class="plate">
-        <div class="frame" style="--ar:4/5">
-          <img src="img/pptx/image40.jpeg" alt="강진숙 작품 이미지" style="width:330px">
-          <span class="reg tl"></span><span class="reg tr"></span>
-          <span class="reg bl"></span><span class="reg br"></span>
-        </div>
-        <div>
-          <p class="cap-title">아티스트 북 『무제』 <p class="cap-meta">리놀륨 판화 · 페이퍼 커팅 · 2013</p>
-        </div>
-      </div>
-    </div>
-    <div class="page-half image-side">
-      <div class="plate">
-        <div class="frame" style="--ar:4/5">
-          <img src="img/pptx/image41.png" alt="강진숙 작품 이미지">
-          <span class="reg tl"></span><span class="reg tr"></span>
-          <span class="reg bl"></span><span class="reg br"></span>
-        </div>
-        <div>
-          <p class="cap-title">『What a wonderful world』 <p class="cap-meta"> 페이퍼 커팅 · 2015</p>
-        </div>
-      </div>
+      <p class="cap-title">『누워서 사는 나무』
+       <p class="cap-meta"> 아티스트 북 글 강진숙 스텐실 페이퍼 커팅<br>2016</p>
     </div>
   </div>
 </section>
@@ -1568,24 +1764,85 @@
 </section>
 
 <section class="page">
+  <div class="plate center" style="max-width:480px">
+    <div class="frame">
+      <img src="img/1. 석판화 무제2001.png" alt="무제">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">무제</p>
+      <p class="cap-meta">다색 석판화</p>
+      <p class="cap-meta">2001</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:480px">
+    <div class="frame">
+      <img src="img/2. 석판화 마음속의 정글, 2004.jpg" alt="마음속의 정글">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">마음속의 정글</p>
+      <p class="cap-meta">석판화</p>
+      <p class="cap-meta">2004</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
   <div class="plate center book-spread">
-    <div class="book-spread-row">
-      <div class="frame" style="--ar:3/2">
-        <img src="img/pptx/image42.jpg" alt="『마음속의 정글』">
+    <div class="book-spread-row match-h tight">
+      <div class="frame">
+        <img src="img/i2.jpg" alt="마음속의 정글">
         <span class="reg tl"></span><span class="reg tr"></span>
         <span class="reg bl"></span><span class="reg br"></span>
       </div>
-      <div class="frame" style="--ar:3/2">
-        <img src="img/pptx/image43.png" alt="『마음속의 정글』">
+      <div class="frame">
+        <img src="img/i3.jpg" alt="마음속의 정글">
         <span class="reg tl"></span><span class="reg tr"></span>
         <span class="reg bl"></span><span class="reg br"></span>
       </div>
     </div>
     <div>
-      <p class="cap-title">『마음속의 정글』 리놀륨 판화 
-        <p class="cap-meta">석판화 · 페이퍼 커팅 · 2013&ndash;2014</p>
+      <p class="cap-title">마음속의 정글</p>
+      <p class="cap-meta">석판화</p>
+      <p class="cap-meta">2004</p>
     </div>
-    
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center book-spread">
+    <div class="book-spread-row match-h">
+      <div class="book-spread-item">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image42.jpg" alt="『마음속의 정글』">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">마음속의 정글</p>
+          <p class="cap-meta">석판화 리놀륨판화 페이퍼 커팅</p>
+          <p class="cap-meta">2013</p>
+        </div>
+      </div>
+      <div class="book-spread-item">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image43.png" alt="『마음속의 정글』">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">마음속의 정글</p>
+          <p class="cap-meta">리놀륨판화 페이퍼 커팅</p>
+          <p class="cap-meta">2014</p>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1599,7 +1856,7 @@
           <span class="reg bl"></span><span class="reg br"></span>
         </div>
         <div>
-          <p class="cap-title">마음속의 정글 &ndash; 피어나다 <p class="cap-meta">석판화 · 2024</p>
+          <p class="cap-title">마음속의 정글 &ndash; 피어나다 <p class="cap-meta">석판화<br>2024</p>
          
         </div>
       </div>
@@ -1612,7 +1869,7 @@
           <span class="reg bl"></span><span class="reg br"></span>
         </div>
         <div>
-          <p class="cap-title">마음속의 정글 - 고리 <p class="cap-meta">석판화 · 2024</p>
+          <p class="cap-title">마음속의 정글 - 고리 <p class="cap-meta">석판화<br>2024</p>
         
         </div>
       </div>
@@ -1630,7 +1887,7 @@
           <span class="reg bl"></span><span class="reg br"></span>
         </div>
         <div>
-          <p class="cap-title">마음속의 정글 &ndash; 원 <p class="cap-meta">석판화 · 2025</p>
+          <p class="cap-title">마음속의 정글 &ndash; 원이 되기 까지 <p class="cap-meta">석판화 · 20 x 25 cm <br>2025</p>
         </div>
       </div>
     </div>
@@ -1642,8 +1899,7 @@
           <span class="reg bl"></span><span class="reg br"></span>
         </div>
         <div>
-          <p class="cap-title">마음속의 정글 - 추억 속의 정글 <p class="cap-meta">석판화 · 2025</p>
-         
+          <p class="cap-title">마음속의 정글 - 추억 속의 정글 <p class="cap-meta">석판화 · 25 x 34cm<br>2025</p>
         </div>
       </div>
     </div>
@@ -1651,14 +1907,23 @@
 </section>
 
 <section class="page">
-  <div class="plate center" style="max-width:440px">
-    <div class="frame" style="--ar:1/1">
-      <img src="img/pptx/image50.jpg" alt="마음속의 정글 — 페이퍼 커팅">
-      <span class="reg tl"></span><span class="reg tr"></span>
-      <span class="reg bl"></span><span class="reg br"></span>
+  <div class="plate center book-spread">
+    <div class="book-spread-row match-h">
+      <div class="frame" style="--ar:1/1">
+        <img src="img/pptx/image50.jpg" alt="마음속의 정글 — 페이퍼 커팅">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame" style="--ar:1/1">
+        <img src="img/i0.jpg" alt="마음속의 정글">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
     </div>
     <div>
-      <p class="cap-title">마음속의 정글 · 석판화 <p class="cap-meta">리놀륨 판화 · 리놀륨 판화 · 페이퍼 커팅 · 2024-2026</p>
+      <p class="cap-title">마음속의 정글</p>
+      <p class="cap-meta">석판화 리놀륨판화 페이퍼 커팅</p>
+      <p class="cap-meta">2024-2026</p>
     </div>
   </div>
 </section>
