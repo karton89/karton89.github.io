@@ -1,0 +1,2193 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Papier, Wald und Erinnerung — Jinsuk Kang</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/MaruBuri/subsets/MaruBuri-dynamic-subset.css">
+<noscript><style>.page{ opacity:1 !important; transform:none !important; }</style></noscript>
+
+<!--
+  이미지를 넣는 방법
+  ------------------
+  각 작품 자리는 class="frame" 인 <div> 로 비워져 있습니다.
+  그 안에 아래처럼 이미지를 넣어 주세요.
+
+    <div class="frame">
+      <img src="작품파일명.jpg" alt="작품명">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+
+  이미지는 원래 비율과 자연 크기를 우선하며, 화면보다 클 때만 줄어듭니다.
+-->
+
+<style>
+  :root{
+    --ink: 33,31,28;
+    --ink-soft: 111,103,90;
+    --paper: 250,246,238;
+    --paper-deep: 240,233,217;
+    --line: rgba(var(--ink), .14);
+    --display: 'Maru Buri', 'Noto Serif KR', serif;
+    --serif: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+    --sans: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    --cover-art-w: min(600px, 80vw);
+  }
+
+  .cover-title,
+  .chapter-title,
+  .profile-name,
+  .cv-heading{
+    font-family: var(--display);
+    font-weight: 600;
+    letter-spacing: .045em;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+  }
+
+  body{
+    margin: 0;
+    background-color: rgb(var(--paper));
+    background-image:
+      linear-gradient(rgba(var(--paper),.86), rgba(var(--paper),.86)),
+      url('bg.jpg');
+    background-size: auto, 900px;
+    background-repeat: repeat, repeat;
+    background-attachment: fixed, fixed;
+    color: rgb(var(--ink));
+    font-family: var(--serif);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    counter-reset: pg;
+  }
+
+  ::selection{ background: rgba(var(--ink),.12); }
+
+  a{ color: inherit; }
+
+  h1,h2,h3,p{ margin: 0; }
+
+  /* ---------- page unit ---------- */
+  .page{
+    min-height: 100svh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 9vh 8vw;
+    scroll-snap-align: start;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .page.in{ opacity: 1; transform: translateY(0); }
+  .cover{ opacity: 1; transform: none; }
+
+  .page:not(.cover)::after{
+    counter-increment: pg;
+    content: counter(pg);
+    position: absolute;
+    bottom: 5.2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--sans);
+    font-size: .68rem;
+    letter-spacing: .18em;
+    color: rgba(var(--ink-soft),.8);
+  }
+
+  /* ---------- cover ---------- */
+  .cover{
+    /* text-align: center; */
+    gap: 2.4rem;
+  }
+  .cover-title{
+    font-size: clamp(1.9rem, 4.6vw, 2.8rem);
+    line-height: 1.5;
+  }
+  .cover-frame{
+    width: var(--cover-art-w);
+    max-width: min(80vw, 900px);
+  }
+  .cover-frame .frame{
+    margin: 0 auto;
+    width: 100%;
+  }
+  .cover-frame .frame img{
+    width: 100%;
+    max-width: 100%;
+  }
+  .cover-byline{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+  }
+  .cover-byline--end{ margin-top: 2.4rem; }
+  .cover-name{
+    font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    letter-spacing: .3em;
+    padding-left: .3em; /* optical centering with tracking */
+  }
+  .cover-name-en{
+    font-family: var(--sans);
+    font-size: .62rem;
+    font-weight: 300;
+    letter-spacing: .28em;
+    color: rgba(var(--ink-soft), .82);
+    text-transform: uppercase;
+    padding-left: .28em;
+  }
+
+  .closing-sign-block{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .65rem;
+    margin-top: 2.4rem;
+  }
+  .closing-sign{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 1.8rem);
+  }
+  .closing-photo{
+    margin: 0;
+    flex: 0 0 auto;
+  }
+  .closing-frame{
+    width: min(132px, 26vw);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+  .closing-frame img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  .closing-name{
+    font-family: 'Nanum Pen Script', cursive;
+    font-size: clamp(2.4rem, 7vw, 3.4rem);
+    font-weight: 400;
+    letter-spacing: -.01em;
+    line-height: 1;
+    margin: 0;
+    color: rgba(var(--ink), .92);
+    transform: rotate(-5deg) translateY(2px);
+    transform-origin: left center;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px){
+    .closing-sign{
+      gap: .85rem;
+    }
+    .closing-frame{
+      width: min(108px, 22vw);
+    }
+    .closing-name{
+      font-size: clamp(2rem, 9vw, 2.6rem);
+      transform: rotate(-4deg) translateY(1px);
+    }
+  }
+
+  .cover-sub{
+    font-family: var(--sans);
+    font-size: .68rem;
+    letter-spacing: .22em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+  }
+
+  /* ---------- spread (two-page layout) ---------- */
+  .spread{
+    width: 100%;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    align-items: center;
+    gap: 0 6vw;
+  }
+  .spread::before{
+    content: '';
+    position: absolute;
+    top: 6%; bottom: 6%; left: 50%;
+    width: 1px;
+    /* background: linear-gradient(to bottom, transparent, var(--line) 18%, var(--line) 82%, transparent); */
+  }
+  .spread::after{
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: calc(50% - 34px);
+    width: 68px;
+    background: linear-gradient(to right, transparent, rgba(var(--ink),.035), transparent);
+    pointer-events: none;
+  }
+  .page-half{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.1rem;
+  }
+  .page-half.text-side{ padding-right: 2vw; }
+  .page-half.image-side{ padding-left: 2vw; }
+
+  /* same display height for side-by-side works with different aspect ratios */
+  .spread.match-height .frame img{
+    height: clamp(160px, 28vh, 280px);
+    width: auto;
+    max-width: 100%;
+    max-height: none;
+  }
+
+  @media (max-width: 860px){
+    .spread{ grid-template-columns: 1fr; gap: 4.5rem 0; max-width: 480px; }
+    .spread::before, .spread::after{ display: none; }
+    .page-half.text-side, .page-half.image-side{ padding: 0; }
+    .spread.match-height .frame img{
+      height: auto;
+      max-height: 72vh;
+    }
+  }
+
+  /* ---------- plate / frame ---------- */
+  .plate{ display:flex; flex-direction:column; align-items:center; gap: 1.1rem; }
+  .plate.center{ align-items: center; text-align: center; }
+  .plate.center{ max-width: min(92vw, 960px) !important; }
+
+  .frame{
+    position: relative;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    /* border: 1px solid rgba(var(--ink),.16); */
+    background: transparent;
+    overflow: visible;
+    line-height: 0;
+  }
+  .frame img{
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 72vh;
+    /* object-fit: contain; */
+    object-position: center;
+    display: block;
+  }
+  .frame .ph{
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans);
+    font-size: .64rem;
+    letter-spacing: .3em;
+    color: rgba(var(--ink-soft), .45);
+    text-transform: uppercase;
+  }
+
+  .reg{ position: absolute; width: 11px; height: 11px; pointer-events: none; }
+  .reg::before, .reg::after{ content:''; position:absolute; background: rgba(var(--ink),.38); }
+  .reg::before{ width: 11px; height: 1px; top: 5px; left: 0; }
+  .reg::after{ width: 1px; height: 11px; left: 5px; top: 0; }
+  .reg.tl{ top: -6px; left: -6px; }
+  .reg.tr{ top: -6px; right: -6px; }
+  .reg.bl{ bottom: -6px; left: -6px; }
+  .reg.br{ bottom: -6px; right: -6px; }
+
+  .cap-title{
+    font-family: var(--serif);
+    font-style: normal;
+    font-weight: 500;
+    font-size: .95rem;
+    line-height: 1.6;
+  }
+  .cap-meta{
+    font-family: var(--sans);
+    font-size: .74rem;
+    letter-spacing: .03em;
+    color: rgb(var(--ink-soft));
+  }
+
+  /* small multiples grid */
+  .grid-plates{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.6rem 1.4rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  .grid-plates.cols-3{ max-width: 100%; }
+  .grid-plates .mini{ display:flex; flex:0 1 auto; flex-direction:column; align-items:center; text-align:center; gap:.55rem; }
+  .grid-plates .frame{ max-width: 100%; }
+  .grid-plates img{ max-width: min(100%, 82vw); }
+  /* .grid-plates .cap-title{ font-size: .78rem; } */
+  .grid-plates .cap-meta{ font-size: .66rem; }
+
+  .book-spread{
+    width: 100%;
+    max-width: min(960px, 94vw);
+    gap: 1.4rem;
+  }
+  .book-spread-row{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: clamp(.7rem, 1.8vw, 1.2rem);
+    width: 100%;
+  }
+  .book-spread-row.match-h{
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(1.2rem, 3vw, 2rem);
+  }
+  .book-spread-row.match-h.tight{
+    gap: clamp(1rem, 2.4vw, 1.6rem);
+  }
+  .book-spread-item{
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .7rem;
+    text-align: center;
+  }
+  .book-spread-item .frame{
+    width: 100%;
+  }
+  .book-spread-row .frame{
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+  }
+  .book-spread-row.match-h > .frame{
+    flex: 0 1 auto;
+    width: auto;
+    max-width: min(420px, calc(50% - .8rem));
+    height: clamp(280px, 42vw, 460px);
+    overflow: hidden;
+  }
+  .book-spread-row.match-h .book-spread-item .frame{
+    height: clamp(280px, 42vw, 460px);
+    overflow: hidden;
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  .book-spread-row img{
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: none;
+    object-fit: contain;
+  }
+  .book-spread-row.match-h > .frame img{
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+  .book-spread-row.match-h .book-spread-item img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  @media (max-width: 720px){
+    .book-spread-row{
+      flex-direction: column;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .book-spread-row .frame,
+    .book-spread-item{
+      flex: 0 1 auto;
+      max-width: min(300px, 78vw);
+    }
+    .book-spread-row.match-h > .frame,
+    .book-spread-row.match-h .book-spread-item .frame{
+      height: auto;
+      width: 100%;
+      max-width: min(300px, 78vw);
+    }
+    .book-spread-row.match-h > .frame img,
+    .book-spread-row.match-h .book-spread-item img{
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .natural-group{
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+  .natural-group .frame{ flex: 0 1 auto; }
+  .natural-group img{ max-width: min(100%, 82vw); }
+  .box-series-grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 680px));
+    gap: 1.4rem;
+    justify-content: center;
+    width: 100%;
+    max-width: min(100%, 1400px);
+  }
+  .box-series-grid .frame{
+    width: 100%;
+    aspect-ratio: 680 / 337;
+    background: rgba(var(--paper), .45);
+    overflow: hidden;
+  }
+  .box-series-grid img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .story-stack{
+    width: 100%;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    column-gap: 2.2rem;
+  }
+  .story-item{
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .7rem;
+  }
+  /* left full artwork + right stack share the same box height */
+  .story-item:first-child > .frame,
+  .story-stack-bottom{
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .story-item:first-child > .frame img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    display: block;
+  }
+  .story-stack-bottom{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+  }
+  .story-stack-bottom .frame{
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .story-stack-bottom img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    /* object-fit: cover; */
+    object-position: center;
+    display: block;
+  }
+  .story-cap{
+    text-align: center;
+  }
+  @media (max-width: 860px){
+    .story-stack{
+      grid-template-columns: 1fr;
+      gap: 2.4rem;
+      max-width: 520px;
+    }
+    .story-item:first-child > .frame,
+    .story-stack-bottom{
+      aspect-ratio: auto;
+      height: auto;
+    }
+    .story-item:first-child > .frame img,
+    .story-stack-bottom img{
+      height: auto;
+      object-fit: contain;
+    }
+    .story-stack-bottom{
+      display: flex;
+      flex-direction: column;
+    }
+    .story-stack-bottom .frame{
+      height: auto;
+    }
+  }
+
+  .little-tree-stack{
+    width: 100%;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: .9rem 1.2rem;
+  }
+  .little-tree-stack .small-tree-main{
+    width: 100%;
+    min-width: 0;
+  }
+  .little-tree-stack .small-tree-main .frame{
+    display: block;
+    width: 100%;
+  }
+  .little-tree-stack .small-tree-main img{
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    display: block;
+  }
+  .little-tree-row{
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+  }
+  .little-tree-row .frame{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .little-tree-row img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .little-tree-cap{
+    text-align: center;
+    margin-top: 1.1rem;
+  }
+  .chapter-betweens{
+    width: 100%;
+    max-width: 1240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+  }
+  .chapter-betweens-top{
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, .9fr);
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+  .chapter-betweens-top .frame,
+  .chapter-betweens-top img{
+    width: 100%;
+    max-width: none;
+    max-height: none;
+  }
+  .chapter-betweens-main .frame{
+    height: clamp(360px, 40vw, 640px);
+    overflow: hidden;
+  }
+  .chapter-betweens-main img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .chapter-betweens-side{
+    display: grid;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+    min-height: clamp(300px, 34vw, 520px);
+  }
+  .chapter-betweens-side .frame{
+    height: 100%;
+    overflow: hidden;
+  }
+  .chapter-betweens-side img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .chapter-betweens-title{
+    text-align: center;
+    margin-top: .2rem;
+  }
+  .chapter-betweens-gap{
+    height: clamp(1.5rem, 3vw, 3rem);
+  }
+  .chapter-betweens-bottom{
+    width: 100%;
+    max-width: 1180px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 1rem 1.4rem;
+  }
+  .chapter-betweens-bottom-main{
+    width: 100%;
+    min-width: 0;
+  }
+  .chapter-betweens-bottom-main .frame{
+    display: block;
+    width: 100%;
+  }
+  .chapter-betweens-bottom-main img{
+    width: 100%;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    display: block;
+  }
+  .chapter-betweens-bottom-row{
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .chapter-betweens-bottom-row .frame{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .chapter-betweens-bottom-row img{
+    position: absolute;
+    inset: 0;
+    /* width: 100%; */
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .chapter-betweens-bottom-cap{
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-top: .2rem;
+  }
+
+  @media (max-width: 980px){
+    .box-series-grid{
+      grid-template-columns: minmax(0, 680px);
+    }
+    .little-tree-stack{
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+      max-width: 640px;
+    }
+    .little-tree-row{
+      height: auto;
+      grid-template-rows: none;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    .little-tree-row .frame{
+      position: static;
+      height: auto;
+    }
+    .little-tree-row img{
+      position: static;
+      height: auto;
+      object-fit: contain;
+    }
+    .chapter-betweens-top{
+      grid-template-columns: 1fr;
+    }
+    .chapter-betweens-side{
+      min-height: 0;
+      grid-template-rows: repeat(2, minmax(220px, auto));
+    }
+    .chapter-betweens-bottom{
+      grid-template-columns: 1fr;
+      gap: 1.4rem;
+      max-width: 640px;
+    }
+    .chapter-betweens-bottom-row{
+      height: auto;
+      grid-template-rows: none;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    .chapter-betweens-bottom-row .frame{
+      position: static;
+      height: auto;
+    }
+    .chapter-betweens-bottom-row img{
+      position: static;
+      height: auto;
+      object-fit: contain;
+    }
+    .chapter-betweens-bottom-row{
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- chapter divider ---------- */
+  .divider-page{ text-align: center; gap: 0; }
+  .motif{
+    width: 42px; height: 42px;
+    color: rgb(var(--ink));
+    opacity: .82;
+    margin-bottom: 1.6rem;
+  }
+  .motif path{ fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round; }
+  .chapter-num{
+    font-family: var(--sans);
+    font-size: .72rem;
+    letter-spacing: .4em;
+    color: rgb(var(--ink-soft));
+    margin-bottom: .9rem;
+  }
+  .chapter-title{
+    font-size: clamp(1.8rem, 4.4vw, 2.6rem);
+    margin-bottom: .7rem;
+  }
+  .chapter-en{
+    font-family: var(--sans);
+    font-size: .7rem;
+    letter-spacing: .26em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+    margin-bottom: .3rem;
+  }
+  .chapter-year{
+    font-family: var(--sans);
+    font-size: .78rem;
+    color: rgb(var(--ink-soft));
+    margin-top: .9rem;
+    letter-spacing: .08em;
+  }
+
+  /* ---------- text pages ---------- */
+  .text-page{ width: 100%; max-width: 620px; text-align: left; }
+  .text-page.center{ text-align: center; }
+  .note-spread{
+    width: 100%;
+    max-width: min(920px, 90vw);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(2rem, 3.5vw, 2.8rem);
+    align-items: start;
+  }
+  .note-spread .text-page{
+    max-width: none;
+  }
+
+  #note{
+    position: relative;
+    isolation: isolate;
+  }
+
+  .note-paper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(920px, 88vw);
+    aspect-ratio: 1400 / 1086;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    perspective: 1200px;
+  }
+  .note-paper::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('img/pptx/pimg.jpg') center / contain no-repeat;
+    transform: none;
+    filter: brightness(1.15);
+    /*
+    filter:
+      drop-shadow(0 10px 22px rgba(var(--ink), .1))
+      drop-shadow(0 3px 8px rgba(var(--ink), .05));
+    */
+    transform: rotateX(2deg) rotateY(-1deg);
+    transform-origin: center center;
+    transition: transform 1.3s cubic-bezier(.22, 1, .36, 1), filter 1.3s ease;
+  }
+  #note.in .note-paper::before{
+    transform: rotateX(0.8deg) rotateY(-0.4deg) translateY(-5px);
+    filter:
+      /*
+      drop-shadow(0 14px 28px rgba(var(--ink), .12))
+      drop-shadow(0 5px 12px rgba(var(--ink), .06));
+      */
+  }
+  .note-paper::after{
+    content: '';
+    position: absolute;
+    top: 5%;
+    left: 3.5%;
+    width: 7%;
+    height: 28%;
+    background: linear-gradient(165deg, rgba(var(--ink), .22), rgba(var(--ink), .08) 55%, transparent);
+    filter: blur(4px);
+    border-radius: 0 0 2px 2px;
+    transform: translate(6px, 10px) skewX(-4deg);
+    opacity: 0;
+    transition: opacity 1s ease .3s, transform 1s cubic-bezier(.22, 1, .36, 1) .3s;
+  }
+  #note.in .note-paper::after{
+    opacity: .75;
+    transform: translate(4px, 6px) skewX(-4deg);
+  }
+
+  #note .note-spread{
+    position: relative;
+    z-index: 1;
+    padding: clamp(1.6rem, 3vw, 2.6rem) clamp(1.2rem, 2.5vw, 2rem);
+  }
+  #note .eyebrow{
+    font-size: .66rem;
+    margin-bottom: 1.2rem;
+  }
+  #note .lede p{
+    font-size: .92rem;
+    line-height: 2;
+    margin-bottom: 1.2rem;
+  }
+  #note .note-spread .text-page{
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1s ease, transform 1s cubic-bezier(.22, 1, .36, 1);
+  }
+  #note.in .note-spread .text-page:nth-child(1){
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: .4s;
+  }
+  #note.in .note-spread .text-page:nth-child(2){
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: .62s;
+  }
+
+  .eyebrow{
+    font-family: var(--sans);
+    font-size: .7rem;
+    letter-spacing: .32em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+    margin-bottom: 1.6rem;
+    display: block;
+  }
+  .text-page h2{
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.8rem;
+    letter-spacing: .03em;
+  }
+  .lede p{
+    font-size: 1.02rem;
+    line-height: 2.05;
+    letter-spacing: .01em;
+    margin-bottom: 1.5rem;
+  }
+  .lede p:last-child{ margin-bottom: 0; }
+  .note-open p:first-of-type::first-letter{
+    font-size: 3rem;
+    line-height: .7;
+    font-weight: 500;
+    padding-right: .38rem;
+    padding-top: .5rem;
+    float: left;
+  }
+  .profile-lines p{
+    font-size: .98rem;
+    line-height: 2.15;
+  }
+  .profile-name{
+    font-size: clamp(1.22rem, 2.5vw, 1.48rem);
+    margin-bottom: 0;
+  }
+
+  .profile-layout{
+    width: var(--cover-art-w);
+    max-width: min(80vw, 900px);
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: clamp(2.6rem, 7vw, 4.2rem);
+    align-items: center;
+  }
+  .profile-photo{
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+  }
+  .profile-frame{
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+  .profile-frame img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  .profile-copy{
+    text-align: left;
+    width: 100%;
+    min-width: 0;
+  }
+  .profile-byline{
+    align-items: flex-start;
+    margin-bottom: 1.6rem;
+    gap: .45rem;
+  }
+  .profile-copy .cover-name-en{
+    font-size: .58rem;
+    letter-spacing: .26em;
+  }
+  .profile-role{
+    font-size: .98rem;
+    line-height: 2.1;
+    margin-bottom: 1.65rem;
+  }
+
+  @media (max-width: 900px){
+    .profile-layout{
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: var(--cover-art-w);
+      max-width: min(92vw, 600px);
+      gap: 2.8rem;
+    }
+    .profile-photo{
+      display: flex;
+      justify-content: center;
+    }
+    .profile-frame{
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 640px){
+    .profile-layout{
+      gap: 2.4rem;
+    }
+    .profile-lines p{
+      font-size: .92rem;
+      line-height: 2.05;
+    }
+    .profile-role{
+      font-size: .92rem;
+      line-height: 2.05;
+    }
+  }
+
+  /* ---------- CV ---------- */
+  .cv-page{ width: 100%; max-width: 700px; }
+  .cv-heading{
+    font-size: 1.05rem;
+    padding-bottom: .6rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .cv-heading .en{
+    font-family: var(--sans);
+    font-size: .64rem;
+    letter-spacing: .2em;
+    color: rgb(var(--ink-soft));
+    text-transform: uppercase;
+    margin-left: .7rem;
+  }
+  .cv-block + .cv-block{ margin-top: 2.6rem; }
+  .cv-row{
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 1.2rem;
+    padding: .55rem 0;
+    border-bottom: 1px dotted rgba(var(--ink),.12);
+    font-size: .86rem;
+    line-height: 1.65;
+  }
+  .cv-row:last-child{ border-bottom: none; }
+  .cv-year{
+    font-family: var(--sans);
+    color: rgb(var(--ink-soft));
+    font-size: .78rem;
+    letter-spacing: .02em;
+  }
+
+  .cv-layout{
+    width: 100%;
+    max-width: 700px;
+    margin-inline: auto;
+  }
+  .cv-photo{
+    margin: 2rem auto 0;
+    width: min(420px, 68vw);
+  }
+  .cv-frame{
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+  .cv-frame img{
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  @media (max-width: 640px){
+    .cv-photo{
+      margin-top: 1.6rem;
+      width: min(320px, 72vw);
+    }
+    .cv-row{
+      grid-template-columns: 72px 1fr;
+      gap: .9rem;
+      font-size: .82rem;
+    }
+  }
+
+  /* ---------- toc (fore-edge tabs) ---------- */
+  .toc{
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    z-index: 60;
+  }
+  .toc a{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    padding: .85rem .55rem;
+    font-family: var(--serif);
+    font-size: .74rem;
+    letter-spacing: .2em;
+    color: rgba(var(--ink-soft), .75);
+    text-decoration: none;
+    border-left: 1px solid var(--line);
+    background: rgba(var(--paper), .55);
+    transition: color .35s ease, background .35s ease;
+  }
+  .toc a.active{
+    color: rgb(var(--ink));
+    background: rgba(var(--paper), .92);
+  }
+  @media (max-width: 900px){ .toc{ display:none; } }
+
+  @media (prefers-reduced-motion: reduce){
+    .page{ transition:none; opacity:1; transform:none; }
+    html{ scroll-behavior:auto; }
+    .note-paper::before,
+    .note-paper::after,
+    #note .note-spread .text-page{
+      transition: none;
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 640px){
+    .page{ padding: 5.5vh 4.5vw; }
+    .cover-frame{ max-width: 86vw; }
+    .lede p{
+      font-size: .96rem;
+      line-height: 1.9;
+      margin-bottom: 1.1rem;
+    }
+  }
+
+  @media (max-width: 860px){
+    .note-spread{
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: var(--cover-art-w);
+    }
+    #note{
+      justify-content: flex-start;
+      padding-top: 5vh;
+      padding-bottom: 6vh;
+    }
+    .note-paper{
+      top: 0;
+      left: 50%;
+      right: auto;
+      bottom: auto;
+      width: var(--cover-art-w);
+      max-width: min(92vw, 600px);
+      height: auto;
+      aspect-ratio: 1448 / 1086;
+      transform: translateX(-50%);
+      perspective: none;
+    }
+    .note-paper::before{
+      background-size: 100% auto;
+      background-position: top center;
+      background-repeat: no-repeat;
+      transform: none;
+      filter: none;
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 100%);
+    }
+    #note.in .note-paper::before{
+      transform: none;
+      filter: none;
+    }
+    .note-paper::after{
+      top: 2.2%;
+      left: 3.5%;
+      width: 7.5%;
+      height: 24%;
+      transform: translate(3px, 5px) skewX(-3deg);
+      opacity: .55;
+    }
+    #note.in .note-paper::after{
+      transform: translate(2px, 4px) skewX(-3deg);
+    }
+    #note .note-spread{
+      padding: 1.4rem clamp(.8rem, 3vw, 1.2rem) 0;
+      margin-top: clamp(3rem, 12vw, 4.5rem);
+    }
+    #note .note-spread .text-page{
+      transform: translateY(14px);
+    }
+    #note.in .note-spread .text-page:nth-child(1){ transition-delay: .25s; }
+    #note.in .note-spread .text-page:nth-child(2){ transition-delay: .45s; }
+  }
+
+  @media (max-width: 640px){
+    #note{
+      padding-top: 4vh;
+      padding-bottom: 5vh;
+    }
+    .note-paper{
+      width: min(92vw, 600px);
+    }
+    #note .note-spread{
+      margin-top: clamp(2.4rem, 10vw, 3.5rem);
+      padding: 1rem .5rem 0;
+    }
+    #note .lede p{
+      font-size: .88rem;
+      line-height: 1.95;
+      margin-bottom: 1rem;
+    }
+    #note .note-spread .text-page{
+      transform: translateY(12px);
+    }
+    .note-paper::after{
+      width: 8%;
+      height: 20%;
+      max-height: 22vw;
+    }
+  }
+  .note-paper::after{
+    display: none;
+  }
+  .reg{
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<nav class="toc" aria-label="Inhalt">
+  <a href="#profile" data-target="profile">Profil</a>
+  <a href="#note" data-target="note">Künstlernotiz</a>
+  <a href="#ch-box" data-target="ch-box">Geschichte aus dem Karton</a>
+  <a href="#ch-sprout" data-target="ch-sprout">Geschichte vom kleinen Baum</a>
+  <a href="#ch-tree" data-target="ch-tree">Bücher, die zu Bäumen wurden</a>
+  <a href="#ch-jungle" data-target="ch-jungle">Dschungel in meinem Herzen</a>
+  <a href="#cv" data-target="cv">Lebenslauf</a>
+</nav>
+
+<!-- ============ 표지 ============ -->
+<section class="page cover" id="top">
+  <p class="cover-title">Papier, Wald und Erinnerung</p>
+  <div class="cover-byline">
+    <p class="cover-name">강진숙</p>
+    <p class="cover-name-en" lang="en">Jinsuk Kang</p>
+  </div>
+  <div class="cover-frame">
+    <div class="frame" style="--ar:4/5">
+      <img src="img/pptx/image1.png" alt="Werk von Jinsuk Kang">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+  </div>
+
+
+<!-- ============ 소개 ============ -->
+<section class="page" id="profile">
+  <div class="profile-layout">
+    <figure class="profile-photo">
+      <div class="frame profile-frame" style="--ar:4/5">
+        <img src="img/intro.jpg" alt="Jinsuk Kang bei der Arbeit in der Druckwerkstatt">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+    </figure>
+    <div class="profile-copy">
+      <div class="cover-byline profile-byline">
+        <p class="profile-name">강진숙</p>
+        <p class="cover-name-en" lang="en">Jinsuk Kang</p>
+      </div>
+      <p class="profile-role">Druckgrafikerin · Buchkünstlerin</p>
+      <div class="profile-lines">
+        <p>Meine Arbeit, die 1996 mit der „Geschichte aus dem Karton“ begann,</p>setzte sich in Druckgrafik, Künstlerbüchern und Papierarbeiten fort </p>
+          und lässt eine einzige Geschichte immer weiter wachsen.</p>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 작가노트 ============ -->
+<section class="page" id="note">
+  <div class="note-paper" aria-hidden="true"></div>
+  <div class="note-spread">
+    <div class="text-page">
+      <span class="eyebrow">Künstlernotiz</span>
+          <div class="lede note-open">
+        <p>Meine Arbeit begann 1996 mit der Lithografie-Serie „Geschichte aus dem Karton“.</p>
+        <p>Während meines Studiums in Deutschland verbrachte ich durch Schwangerschaft, Geburt und die Zeit mit kleinen Kindern viele Stunden zu Hause und fühlte mich wie in einem Karton eingeschlossen. Zugleich erlebte ich immer wieder, wie sich ein gefalteter Pappkarton entfaltet und zu einem Raum wird. So begann ich, den Karton als einen Ort zu sehen, an dem Schutz und Enge, Entstehen und Möglichkeit nebeneinander bestehen.</p>
+        <p>Aus dieser Erfahrung entstand das Künstlerbuch „Geschichte aus dem Karton“, dessen Text ich selbst schrieb und das ich als Lithografie druckte. Der kleine Baum, der im Karton heranwuchs, wurde wiederum zur „Geschichte vom kleinen Baum“. Der Baum wuchs zu einem Wald heran, und die Arbeit weitete sich zu Landschaften der Erinnerung, der Beziehungen und des Lebens aus.</p>
+      </div>
+    </div>
+    <div class="text-page">
+      <span class="eyebrow">Künstlernotiz</span>
+      <div class="lede">
+        <p>Die seit 2001 fortgeführte Serie „Dschungel in meinem Herzen“ ist eine Landschaft des Zusammenlebens unterschiedlicher Wesen und zugleich eine Erkundung des inneren Waldes, der aus verflochtenen Erinnerungen und Erfahrungen entsteht.</p>
+        <p>Anfang 2004 vertiefte ich dieses Thema während einer Residenz in einer Münchner Lithografiewerkstatt. Nach meiner Rückkehr nach Korea im selben Jahr experimentierte ich in Künstlerbüchern und Papierarbeiten mit der Form des Buches und mit dem Erzählen. 2024 und 2025 begann ich in einer Druckwerkstatt in Würzburg erneut mit der Lithografie und erweitere so die lange gewachsene Geschichte um neue Arbeiten.</p>
+        <p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 프롤로그: 1991년 초기작 ============ -->
+<section class="page">
+  <div class="spread match-height">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:64/45.4">
+          <img src="img/pptx/image3.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Ohne Titel</p>
+          <p class="cap-meta">Lithografie · 65 × 45.4 cm<br>1991</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:56/38">
+          <img src="img/pptx/image4.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Wald</p>
+          <p class="cap-meta">Lithografie · 56 × 38 cm<br>1991</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER I. 상자 이야기 ============ -->
+<section class="page divider-page" id="ch-box">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M10 16 L24 12 L38 16 L38 34 L24 38 L10 34 Z"/>
+    <path d="M10 16 L24 20 L38 16"/>
+    <path d="M24 20 L24 38"/>
+  </svg>
+  <p class="chapter-num">I</p>
+  <h2 class="chapter-title">Geschichte aus dem Karton</h2>
+  <p class="chapter-en">Box Story</p>
+  <p class="chapter-year">1994 &ndash; 1999</p>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image5.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Ansicht der ersten Einzelausstellung</p>
+          <p class="cap-meta"></p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image6.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Aus der Serie „Geschichte aus dem Karton“</p>
+          <p class="cap-meta">Lithografie · 33x33cm <br>2004</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center">
+    <div class="box-series-grid">
+      <div class="frame">
+        <img src="img/pptx/image7.png" alt="Serie Geschichte aus dem Karton I">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame">
+        <img src="img/pptx/image8.png" alt="Serie Geschichte aus dem Karton II">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame">
+        <img src="img/pptx/image10.jpg" alt="Serie Geschichte aus dem Karton III">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame">
+        <img src="img/pptx/image9.jpg" alt="Serie Geschichte aus dem Karton IV">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+    </div>
+    <div>
+      <p class="cap-title">Serie Geschichte aus dem Karton I · II · III · IV</p>
+      <p class="cap-meta">Farblithografie · Collage · 29 × 59 cm <br> 1994</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center">
+    <div class="frame">
+      <img src="img/pptx/image11.jpg" alt="Geschichte aus dem Karton">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">Geschichte aus dem Karton</p>
+      <p class="cap-meta">Lithografie · je 10 × 10 cm <br> 1994</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center">
+    <div class="story-stack">
+      <div class="story-item">
+        <div class="frame">
+          <img src="img/pptx/image12.jpg" alt="Künstlerbuch Geschichte aus dem Karton Lithografie">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Geschichte aus dem Karton</p>
+          <p class="cap-meta">Künstlerbuch, Text: Jinsuk Kang, Lithografie, englische und deutsche Ausgabe</p>
+          <p class="cap-meta">1996 &ndash; 1997</p>
+        </div>
+      </div>
+      <div class="story-item">
+        <div class="story-stack-bottom">
+          <div class="frame">
+            <img src="img/pptx/image13.jpg" alt="Künstlerbuch Geschichte aus dem Karton Nylondruck links">
+            <span class="reg tl"></span><span class="reg tr"></span>
+            <span class="reg bl"></span><span class="reg br"></span>
+          </div>
+          <div class="frame">
+            <img src="img/pptx/image14.jpg" alt="Künstlerbuch Geschichte aus dem Karton Nylondruck rechts">
+            <span class="reg tl"></span><span class="reg tr"></span>
+            <span class="reg bl"></span><span class="reg br"></span>
+          </div>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Geschichte aus dem Karton</p>
+          <p class="cap-meta">Künstlerbuch, Nylondruck, koreanische und deutsche Ausgabe</p>
+          <p class="cap-meta">1998</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER II. 작은 나무 이야기 ============ -->
+<section class="page divider-page" id="ch-sprout">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M24 40 V22"/>
+    <path d="M24 26 C16 26 14 18 14 14 C20 14 24 18 24 26 Z"/>
+    <path d="M24 22 C32 22 34 15 34 11 C27 11 24 16 24 22 Z"/>
+  </svg>
+  <p class="chapter-num">II</p>
+  <h2 class="chapter-title">Geschichte vom kleinen Baum</h2>
+  <p class="chapter-en">Little Tree Story</p>
+  <p class="chapter-year">1999 &ndash; 2000</p>
+</section>
+
+<!--
+<section class="page">
+  <div class="plate center" style="max-width:460px">
+    <div class="frame" style="--ar:3/2">
+      <img src="img/pptx/image14.jpg" alt="강진숙 작품 이미지">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">아티스트 북 『작은 나무 이야기』</p>
+      <p class="cap-meta">글 강진숙 · 세리그라피 · 1999&ndash;2000</p>
+    </div>
+  </div>
+</section>
+ -->
+<section class="page">
+  <div class="plate center">
+    <div class="little-tree-stack">
+      <div class="small-tree-main">
+        <div class="frame">
+          <img src="img/pptx/image15.jpg" alt="Künstlerbuch Geschichte vom kleinen Baum Hauptbild">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+      <div class="little-tree-row">
+        <div class="frame">
+          <img src="img/pptx/image16.jpg" alt="Künstlerbuch Geschichte vom kleinen Baum Bild 1">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image17.jpg" alt="Künstlerbuch Geschichte vom kleinen Baum Bild 2">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image18.jpg" alt="Künstlerbuch Geschichte vom kleinen Baum Bild 3">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+    </div>
+    <div class="little-tree-cap">
+      <p class="cap-title">Geschichte vom kleinen Baum</p>
+      <p class="cap-meta">Künstlerbuch, Text: Jinsuk Kang, Serigrafie</p>
+      <p class="cap-meta">1999 &ndash; 2000</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ 간주 (원본에 이미지만 있던 페이지들) ============ -->
+
+<section class="page divider-page" id="ch-sprout">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M24 40 V22"/>
+    <path d="M24 26 C16 26 14 18 14 14 C20 14 24 18 24 26 Z"/>
+    <path d="M24 22 C32 22 34 15 34 11 C27 11 24 16 24 22 Z"/>
+  </svg>
+  <p class="chapter-num">III</p>
+  <h2 class="chapter-title">Mein Wald, meine Landschaft</h2>
+  <p class="chapter-en">My Forest My Landscape</p>
+</section>
+
+<section class="page">
+  <div class="chapter-betweens">
+    <div class="chapter-betweens-top">
+      <div class="chapter-betweens-main">
+        <div class="frame">
+          <img src="img/pptx/image19.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+
+      </div>
+      <div class="chapter-betweens-side">
+        <div class="frame">
+          <img src="img/pptx/image20.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image21.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+    </div>
+    <div class="chapter-betweens-bottom-cap">
+      <p class="cap-title">Mein Wald, meine Landschaft</p>
+      <p class="cap-meta">Künstlerbuch, Lithografie, mit Christine Finsterbusch</p>
+      <p class="cap-meta">1998</p>
+    </div>
+</section>
+
+<section class="page divider-page" id="ch-sprout">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M24 40 V22"/>
+    <path d="M24 26 C16 26 14 18 14 14 C20 14 24 18 24 26 Z"/>
+    <path d="M24 22 C32 22 34 15 34 11 C27 11 24 16 24 22 Z"/>
+  </svg>
+  <p class="chapter-num">IV</p>
+  <h2 class="chapter-title">Geschichte von den Geschichten</h2>
+  <p class="chapter-en">Künstlerbuch, Postkarten, Siebdruck</p>
+  <p class="chapter-year">2000</p>
+</section>
+
+<section class="page">
+  <div class="plate center">
+    <div class="chapter-betweens-bottom">
+      <div class="chapter-betweens-bottom-main">
+        <div class="frame">
+          <img src="img/pptx/image24.jpg" alt="Geschichte von den Geschichten Künstlerbuch">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+      <div class="chapter-betweens-bottom-row">
+        <div class="frame">
+          <img src="img/pptx/image23.png" alt="Geschichte von den Geschichten – Kassette">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="frame">
+          <img src="img/pptx/image22.jpg" alt="Geschichte von den Geschichten – aufgeklappt">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+      </div>
+      <div class="chapter-betweens-bottom-cap">
+        <p class="cap-title">Geschichte von den Geschichten</p>
+        <p class="cap-meta">Künstlerbuch, Postkarten, Siebdruck</p>
+        <p class="cap-meta">2000</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER III. 나무가 되고 싶은 책 책이 되고 싶은 나무 ============ -->
+<section class="page divider-page" id="ch-tree">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M24 40 V24"/>
+    <path d="M24 30 L14 20"/>
+    <path d="M24 26 L34 17"/>
+    <path d="M24 22 L18 14"/>
+    <path d="M24 20 L30 12"/>
+  </svg>  
+  <p class="chapter-num">V</p>
+  <h2 class="chapter-title">Ein Buch, das ein Baum sein möchte – ein Baum, der ein Buch sein möchte</h2>
+  <p class="chapter-en">A Tree Becoming a Book, a Book Becoming a Tree</p>
+  <p class="chapter-year">2007 &ndash; 2016</p>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:420px">
+    <div class="frame" style="--ar:4/5">
+      <img src="img/pptx/image31.jpeg" alt="Bücher, die zu Bäumen wurden — Werk von Jinsuk Kang">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">Die Schublade des Baumes  <p class="cap-meta">Papier<br>2007
+      </p>
+    </div>
+  </div>
+</section>
+  
+<section class="page">
+  <div style="width:100%; max-width:640px; display:flex; flex-direction:column; align-items:center; gap:1.8rem;">
+    <div class="grid-plates cols-3">
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image32.jpg" alt="Werk von Jinsuk Kang"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >Ausstellungsansicht, Galerie Jota, 2007
+      </p></div>
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image33.jpg" alt="Werk von Jinsuk Kang"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >Baby-Kudzu und Großmutter Erle <p class="cap-meta">Papier · Prägung · Holz<br>2009 
+      </p></div>
+      <div class="mini"><div class="frame" style="--ar:4/5"><img src="img/pptx/image34.jpeg" alt="Werk von Jinsuk Kang"><span class="reg tl"></span><span class="reg tr"></span><span class="reg bl"></span><span class="reg br"></span></div><p class="cap-title" >Ein Buch, das ein Baum sein möchte – ein Baum, der ein Buch sein möchte <p class="cap-meta">Papier<br>2011
+      </p></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:520px">
+    <div class="frame" style="--ar:3/2">
+      <img src="img/pptx/image36.jpg" alt="Werk von Jinsuk Kang">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">Wenn ich im Schatten der Alleebäume stehe <p class="cap-meta">Papierschnitt<br>2010 
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:400px">
+    <div class="frame" style="--ar:4/5">
+      <img src="img/pptx/image35.jpg" alt="Werk von Jinsuk Kang Imagine" style="width:500px">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">Imagine  <p class="cap-meta">Linolschnitt · Papierschnitt · Prägung <br>2013</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image40.jpeg" alt="Werk von Jinsuk Kang" style="width:330px">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">„Ohne Titel“ <p class="cap-meta">Linolschnitt · Papierschnitt<br>2013</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image41.png" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">„What a wonderful world“ <p class="cap-meta"> Papierschnitt<br>2015</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center book-spread">
+    <div class="book-spread-row">
+      <div class="frame" style="--ar:4/5">
+        <img src="img/pptx/image37.jpg" alt="Künstlerbuch „Der Baum, der liegend lebt“ Umschlag">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame" style="--ar:4/5">
+        <img src="img/pptx/image38.jpg" alt="Künstlerbuch „Der Baum, der liegend lebt“ – Innenseite">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame" style="--ar:4/5">
+        <img src="img/pptx/image39.jpg" alt="Künstlerbuch „Der Baum, der liegend lebt“ – Innenseite">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+    </div>
+    <div>
+      <p class="cap-title">„Der Baum, der liegend lebt“
+       <p class="cap-meta"> Künstlerbuch, Text: Jinsuk Kang, Schablone, Papierschnitt<br>2016</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER IV. 마음속의 정글 ============ -->
+<section class="page divider-page" id="ch-jungle">
+  <svg class="motif" viewBox="0 0 48 48">
+    <path d="M20 40 C18 28 22 18 19 8"/>
+    <path d="M24 40 C25 26 23 14 27 6"/>
+    <path d="M28 40 C31 30 28 20 32 10"/>
+  </svg>
+  <p class="chapter-num">VI</p>
+  <h2 class="chapter-title">Dschungel in meinem Herzen</h2>
+  <p class="chapter-en">Jungle in my Heart</p>
+  <p class="chapter-year">2001 &ndash; 2004 · 2024 &ndash; 2026</p>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:480px">
+    <div class="frame">
+      <img src="img/1. 석판화 무제2001.png" alt="Ohne Titel">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">Ohne Titel</p>
+      <p class="cap-meta">Farblithografie</p>
+      <p class="cap-meta">2001</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center" style="max-width:480px">
+    <div class="frame">
+      <img src="img/2. 석판화 마음속의 정글, 2004.jpg" alt="Dschungel in meinem Herzen">
+      <span class="reg tl"></span><span class="reg tr"></span>
+      <span class="reg bl"></span><span class="reg br"></span>
+    </div>
+    <div>
+      <p class="cap-title">Dschungel in meinem Herzen</p>
+      <p class="cap-meta">Lithografie</p>
+      <p class="cap-meta">2004</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center book-spread">
+    <div class="book-spread-row match-h tight">
+      <div class="frame">
+        <img src="img/i2.jpg" alt="Dschungel in meinem Herzen">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame">
+        <img src="img/i3.jpg" alt="Dschungel in meinem Herzen">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+    </div>
+    <div>
+      <p class="cap-title">Dschungel in meinem Herzen</p>
+      <p class="cap-meta">Lithografie</p>
+      <p class="cap-meta">2004</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center book-spread">
+    <div class="book-spread-row match-h">
+      <div class="book-spread-item">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image42.jpg" alt="„Dschungel in meinem Herzen“">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">Dschungel in meinem Herzen</p>
+          <p class="cap-meta">Lithografie · Linolschnitt · Papierschnitt</p>
+          <p class="cap-meta">2013</p>
+        </div>
+      </div>
+      <div class="book-spread-item">
+        <div class="frame" style="--ar:3/2">
+          <img src="img/pptx/image43.png" alt="„Dschungel in meinem Herzen“">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div>
+          <p class="cap-title">Dschungel in meinem Herzen</p>
+          <p class="cap-meta">Linolschnitt · Papierschnitt</p>
+          <p class="cap-meta">2014</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image44.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Dschungel in meinem Herzen &ndash; Erblühen <p class="cap-meta">Lithografie<br>2024</p>
+         
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image45.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Dschungel in meinem Herzen – Ring <p class="cap-meta">Lithografie<br>2024</p>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="spread">
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image46.png" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Dschungel in meinem Herzen &ndash; Bis es ein Kreis wird <p class="cap-meta">Lithografie · 20 x 25 cm <br>2025</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-half image-side">
+      <div class="plate">
+        <div class="frame" style="--ar:4/5">
+          <img src="img/pptx/image47.jpg" alt="Werk von Jinsuk Kang">
+          <span class="reg tl"></span><span class="reg tr"></span>
+          <span class="reg bl"></span><span class="reg br"></span>
+        </div>
+        <div class="story-cap">
+          <p class="cap-title">Dschungel in meinem Herzen - Dschungel der Erinnerung <p class="cap-meta">Lithografie · 25 x 34cm<br>2025</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="plate center book-spread">
+    <div class="book-spread-row match-h">
+      <div class="frame" style="--ar:1/1">
+        <img src="img/pptx/image50.jpg" alt="Dschungel in meinem Herzen — Papierschnitt">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+      <div class="frame" style="--ar:1/1">
+        <img src="img/i0.jpg" alt="Dschungel in meinem Herzen">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+    </div>
+    <div>
+      <p class="cap-title">Dschungel in meinem Herzen</p>
+      <p class="cap-meta">Lithografie · Linolschnitt · Papierschnitt</p>
+      <p class="cap-meta">2024-2026</p>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+<div class="plate center">
+<div class="frame">
+<img src="img/KakaoTalk_20261125_114623469.jpg" alt="Dschungel in meinem Herzen Dschungel in meinem Herzen" style="max-height:68vh">
+<span class="reg tl"></span><span class="reg tr"></span>
+<span class="reg bl"></span><span class="reg br"></span>
+</div>
+<div>
+<p class="cap-title">Dschungel in meinem Herzen</p>
+<p class="cap-meta">Lithografie · Linolschnitt · Papierschnitt</p>
+<p class="cap-meta">2024-2026</p>
+</div>
+</div>
+</section>
+
+<section class="page">
+<div class="plate center">
+<div class="frame">
+<img src="img/KakaoTalk_20261125_114623469_01.jpg" alt="Dschungel in meinem Herzen - Dschungel der Erinnerung" style="max-height:68vh">
+<span class="reg tl"></span><span class="reg tr"></span>
+<span class="reg bl"></span><span class="reg br"></span>
+</div>
+<div>
+<p class="cap-title">Dschungel in meinem Herzen - Dschungel der Erinnerung</p>
+<p class="cap-meta">Lithografie · Linolschnitt · Papierschnitt</p>
+<p class="cap-meta">2024-2026</p>
+</div>
+</div>
+</section>
+
+<section class="page">
+<div class="plate center">
+<div class="frame">
+<img src="img/KakaoTalk_20261125_114623469_02.jpg" alt="Dschungel in meinem Herzen" style="max-height:68vh">
+<span class="reg tl"></span><span class="reg tr"></span>
+<span class="reg bl"></span><span class="reg br"></span>
+</div>
+<div>
+<p class="cap-title">Dschungel in meinem Herzen</p>
+<p class="cap-meta">Lithografie · Linolschnitt · Papierschnitt</p>
+<p class="cap-meta">2024-2026</p>
+</div>
+</div>
+</section>
+  
+<!-- ============ CHAPTER V. 경력 ============ -->
+<section class="page divider-page" id="cv">
+  <p class="chapter-num">VII </p>
+  <h2 class="chapter-title">Lebenslauf</h2>
+  <p class="chapter-en">Curriculum Vitae</p>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">Ausbildung</p>
+      <div class="cv-row"><span class="cv-year">1999</span><span>Meisterschülerin, Hochschule für Bildende Künste Braunschweig (HBK)</span></div>
+      <div class="cv-row"><span class="cv-year">1995</span><span>Studienabschluss (Master), Hochschule für Bildende Künste Braunschweig</span></div>
+      <div class="cv-row"><span class="cv-year">1991</span><span>Stipendium des EU-Austauschprogramms Erasmus und Umzug nach Braunschweig; Studium der Lithografie bei Prof. Karl Christoph Schulz an der HBK Braunschweig</span></div>
+      <div class="cv-row"><span class="cv-year">1992</span><span>Studium der Druckgrafik und Lithografie an der Kunsthochschule der Universität Barcelona</span></div>
+      <div class="cv-row"><span class="cv-year">1988</span><span>Bachelor in westlicher Malerei, Incheon National University</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">Einzelausstellungen</p>
+      <div class="cv-row"><span class="cv-year">2023</span><span>„Papiergedanken – Denkendes Papier“, Gallery Flowers, Paju</span></div>
+      <div class="cv-row"><span class="cv-year">2012</span><span>„Vom Baum zum Papier, vom Papier zum Baum“, Einzelausstellung Druckgrafik und Künstlerbücher, Galerie im Gericht Cheonan, Cheonan</span></div>
+      <div class="cv-row"><span class="cv-year">2010</span><span>Jinsuk Kang – Künstlerbücher, Sono Factory, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2010</span><span>Ausstellung zur Veröffentlichung von „Das Buch übers Büchermachen der Buchkünstlerin Jinsuk Kang“ – Dem Buch im Buch begegnen, Alternativer Raum Noon, Suwon</span></div>
+      <div class="cv-row"><span class="cv-year">2009</span><span>„Dschungel in meinem Herzen – Dschungel ins Buch“, Einzelausstellung, Galerie Jota, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2007</span><span>Seoul International Book Art Exhibition, COEX, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2005</span><span>Jinsuk Kang – Künstlerbücher, Alternativer Raum Noon, Suwon</span></div>
+      <div class="cv-row"><span class="cv-year">2005</span><span>Künstlerbücher: Jinsuk Kang = Deutscher Karton, Samwon Paper Gallery, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>Lithografien, Steindruck M&uuml;nchen, München</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>Geschichte aus dem Karton, Galerie Woodeok, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>Geschichte aus dem Karton, Städtisches Museum Alfeld, Alfeld</span></div>
+      <div class="cv-row"><span class="cv-year">2000</span><span>Geschichte von der Geschichten, Bad Gandersheim</span></div>
+      <div class="cv-row"><span class="cv-year">1997</span><span>Geschichte aus dem Karton, Ausstellungsraum im Christlichen Gemeindehaus, Braunschweig</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">Gruppenausstellungen</p>
+      <div class="cv-row"><span class="cv-year">2011</span><span>Between you &amp; me, Samwon Paper Gallery, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2009</span><span>Cheongju International Book Art Exhibition, Korea Craft Museum, Halle 1, Cheongju</span></div>
+      <div class="cv-row"><span class="cv-year">2008</span><span>„Nachfahrinnen von Na Hye-seok“ – 30 Künstlerinnen aus Suwon, Eröffnungsausstellung der Happy Gallery im Familien- und Frauenzentrum Suwon, Suwon</span></div>
+      <div class="cv-row"><span class="cv-year">2008</span><span>Cheongju International Book Art Exhibition, Korea Craft Museum, Halle 1, Cheongju</span></div>
+      <div class="cv-row"><span class="cv-year">2006</span><span>Buchkunst von Druckgrafikern, Gallery Jinsun, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2005</span><span>Going out, Gutenberg-Museum · Cheongju Early Printing Museum, Mainz</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>Künstlerbücher der HBK Braunschweig, Ausstellungsraum der Kunstakademie Vilnius, Litauen</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>„Getrennt und doch zusammen“, Städtisches Museum Opole, Opole (Polen)</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">Gruppenausstellungen (Fortsetzung)</p>
+      <div class="cv-row"><span class="cv-year">2000&ndash;2004</span><span>Teilnahme an der Leipziger Buchmesse, der Frankfurter Buchmesse und an Buchkunstmessen</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>3. Norddeutsche Handpressenmesse, Hamburg</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>Junge Kunst – Sammlung des Umweltbundesamtes, Ausstellungsraum des Umweltbundesamtes, Berlin</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>106. und 107. forumbookart, Chicago · Ann Arbor (USA)</span></div>
+      <div class="cv-row"><span class="cv-year">2001, 2002</span><span>Druckgrafik Printmaking, Hannover · Nürnberg</span></div>
+      <div class="cv-row"><span class="cv-year">2002, 2003</span><span>Art Frankfurt, Galerie Globus, Frankfurt · Kunst Markt, Dresden</span></div>
+      <div class="cv-row"><span class="cv-year">2001, 2002</span><span>10. und 11. Internationale Künstlerbuchausstellung, Leipzig · Köln · Frankfurt · Dresden</span></div>
+      <div class="cv-row"><span class="cv-year">2001</span><span>Sammlung der Deutschen Nationalbibliothek 1997–1999, Deutsches Buch- und Schriftmuseum, Leipzig</span></div>
+      <div class="cv-row"><span class="cv-year">2000</span><span>Einladungsausstellung des Niedersächsischen Kulturministeriums, Ausstellungsraum des Ministeriums, Hannover</span></div>
+      <div class="cv-row"><span class="cv-year">1999</span><span>K&uuml;nstlerbuch &ndash; Buch als Kunstwerk, Objekt, Kassette, Meisterschülerausstellung der HBK Braunschweig, Braunschweig</span></div>
+      <div class="cv-row"><span class="cv-year">1996</span><span>6 x Grafik – junge Druckgrafik, Staatliches Theatermuseum, Braunschweig</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page">
+    <div class="cv-block">
+      <p class="cv-heading">Gemeinschaftsausstellungen</p>
+      <div class="cv-row"><span class="cv-year">2026</span><span>Ausstellung der Korean Contemporary Printmakers Association [Layered Time], Galerie der Chugye University for the Arts, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2026</span><span>Ausstellung der prämierten Werke, 4. Druckgrafik-Wettbewerb Homi Art, Homi Building Gallery, 3. OG, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2026</span><span>BIO DIVERS KUNST OTOJEKT Ausstellung, Aachen</span></div>
+      <div class="cv-row"><span class="cv-year">2026</span><span>Echo, Kunstverein Neu Koln, Berlin</span></div>
+      <div class="cv-row"><span class="cv-year">2022</span><span>Schätze des Klingspor Museums, Hommage an Korea – Schrift, Buch und Druck, Galerie im 3. OG, Cheongju Culture Factory, Cheongju</span></div>
+      <div class="cv-row"><span class="cv-year">2022</span><span>Haenggung Yuram – Haeng Haeng Haeng, Suwon Museum of Art, Suwon</span></div>
+      <div class="cv-row"><span class="cv-year">2016</span><span>„Warum muss ein Buch viereckig sein?“, Jahresausstellung der Korea Book Art Association, Gallery Sagakhyung, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2015</span><span>„Das Buch als Kunst – zehn Jahre mit Flügeln“, Jubiläumsausstellung 10 Jahre Korea Book Art Association, Choi Jeong-a Gallery, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>忘年友&hellip; im Park Soo-keun Museum, Schenkungsausstellung der Korean Contemporary Printmakers Association, Park Soo-keun Museum, Yanggu</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>„Wunderbare Drucke“ – Korean Contemporary Printmakers Association, Seoul Museum of Art, Zweigstelle Gyeonghuigung, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>Real Round Story, Sejong Center – Sejong Story, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>Seoul International Book Fair, Stand des Buchkunst-Ateliers Kkumjirak, COEX, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>„Einem anderen Garten begegnen“, Sonderausstellung zur Internationalen Gartenausstellung Suncheon Bay 2013 – Gärten in der Buchkunst, Sunchon National University, Suncheon</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>The Garden, Korea Book Art Association, University of the Arts, Philadelphia</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>Seoul International Miniature Book Art Exhibition, Korea Book Art Association, COEX, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2013</span><span>Book Art 2013&ndash;14 Japan &ndash; Korea, Gallery Jinsun, Seoul · Osaka</span></div>
+      <div class="cv-row"><span class="cv-year">2012</span><span>„Über das Fremde und das Vertraute“ – Kommunikation durch Multiples, Korea Craft and Design Foundation, Halle 2, 2. OG, Seoul</span></div>
+      <div class="cv-row"><span class="cv-year">2012</span><span>Buchkunst-Atelier Kkumjirak, Alternativer Raum Noon, Suwon</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="cv-page cv-layout">
+    <div class="cv-block">
+      <p class="cv-heading">Auszeichnungen</p>
+      <div class="cv-row"><span class="cv-year">2005</span><span>Bronzepreis, 1. Seoul World Book Art Competition</span></div>
+      <div class="cv-row"><span class="cv-year">2026</span><span>Besondere Auszeichnung, 4. Druckgrafik-Wettbewerb Homi Art</span></div>
+    </div>
+    <div class="cv-block">
+      <p class="cv-heading">Sammlungen</p>
+      <div class="cv-row"><span class="cv-year">2006</span><span>Klingspor Museum, Mainz</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>Bayerische Staatsbibliothek, München</span></div>
+      <div class="cv-row"><span class="cv-year">2003</span><span>Bundesumweltministerium, Berlin</span></div>
+      <div class="cv-row"><span class="cv-year">2002</span><span>Städtisches Museum Ann Arbor (USA)</span></div>
+      <div class="cv-row"><span class="cv-year">2003</span><span>Deutsches Buch- und Schriftmuseum, Leipzig</span></div>
+      <div class="cv-row"><span class="cv-year">2004</span><span>Deutsche Nationalbibliothek, Leipzig und Frankfurt am Main</span></div>
+      <div class="cv-row"><span class="cv-year">1997&ndash;1999</span><span>Herzog August Bibliothek, Wolfenbüttel</span></div>
+    </div>
+    <div class="cv-block">
+      <p class="cv-heading">Publikationen</p>
+      <div class="cv-row"><span class="cv-year">2010.3</span><span>&lt;Das Buch übers Büchermachen der Buchkünstlerin Jinsuk Kang&gt;, Verlag Geuleul Ikda</span></div>
+      <div class="cv-row"><span class="cv-year">2010.10</span><span>&lt;Ein Buch, das ein Baum sein möchte – ein Baum, der ein Buch sein möchte&gt;, Verlag Geuleul Ikda</span></div>
+    </div>
+    <figure class="cv-photo">
+      <div class="frame cv-frame" style="--ar:3/2">
+        <img src="img/pptx/image48.jpg" alt="Bücher von Jinsuk Kang">
+        <span class="reg tl"></span><span class="reg tr"></span>
+        <span class="reg bl"></span><span class="reg br"></span>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ 맺음말 ============ -->
+<section class="page" id="closing">
+  <div class="text-page center">
+    <!--
+    <svg class="motif" viewBox="0 0 48 48" style="width:26px;height:26px;opacity:.55">
+      <path d="M24 40 V22"/>
+      <path d="M24 26 C16 26 14 18 14 14 C20 14 24 18 24 26 Z"/>
+      <path d="M24 22 C32 22 34 15 34 11 C27 11 24 16 24 22 Z"/>
+    </svg>
+    -->
+    <svg class="motif" viewBox="0 0 48 48" style="width:30px;height:30px;opacity:.6">
+      <path d="M10 39 C11 31 14 25 13 17"></path>
+      <path d="M18 40 C18 30 21 22 20 11"></path>
+      <path d="M27 40 C27 29 30 21 29 9"></path>
+      <path d="M36 39 C35 31 38 24 37 16"></path>
+    
+      <path d="M13 20 C7 19 6 14 7 11 C12 12 14 15 13 20 Z"></path>
+      <path d="M20 15 C15 13 15 8 17 6 C22 8 23 11 20 15 Z"></path>
+      <path d="M29 14 C35 12 37 7 35 5 C30 6 28 10 29 14 Z"></path>
+      <path d="M37 21 C42 20 44 16 43 13 C38 14 36 17 37 21 Z"></path>
+    
+      <path d="M8 40 C16 37 29 37 40 40"></path>
+  </svg>
+    <div class="lede" style="margin-top:2rem">
+      <p>Meine Arbeit strebt weniger auf ein Ergebnis zu, als dass sie festhält, wie eine Geschichte, die in einem Karton begann, zum Baum und zum Wald wird und immer weiter wächst.</p>
+    </div>
+    <div class="closing-sign-block">
+      <div class="closing-sign">
+      <!--
+        <figure class="closing-photo">
+
+          <div class="frame closing-frame" style="--ar:4/5">
+            <img src="img/pptx/image49.jpg" alt="판화 작업 중인 강진숙" style="width: 200px;">
+            <span class="reg tl"></span><span class="reg tr"></span>
+            <span class="reg bl"></span><span class="reg br"></span>
+          </div>
+        </figure>
+      -->
+        <p class="closing-name" aria-label="강진숙">강진숙</p>
+      </div>
+      <p class="cover-name-en" lang="en">Jinsuk Kang</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // 스크롤에 따라 페이지가 조용히 드러나는 효과
+  const pages = document.querySelectorAll('.page');
+
+  if (!('IntersectionObserver' in window)) {
+    // 구형 브라우저: 애니메이션 없이 바로 전체 표시
+    pages.forEach(p => p.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('in');
+      });
+    }, { threshold: 0.18 });
+    pages.forEach(p => io.observe(p));
+
+    // 목차(오른쪽 탭)에서 현재 장 표시
+    const tocLinks = document.querySelectorAll('.toc a');
+    const chapterIds = Array.from(tocLinks).map(a => a.dataset.target);
+    const chapterEls = chapterIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    const setActive = (id) => {
+      tocLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+    };
+
+    const chapterIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { threshold: 0.5 });
+    chapterEls.forEach(el => chapterIO.observe(el));
+  }
+
+  // 안전장치: 혹시 관찰이 누락된 페이지가 있어도 3초 후 모두 표시
+  setTimeout(() => pages.forEach(p => p.classList.add('in')), 3000);
+</script>
+
+</body>
+</html>
+
